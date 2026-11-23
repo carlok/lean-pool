@@ -36,12 +36,12 @@ theorem six_exponentials_of_numberField
   classical
   have hl2 : 2 ≤ l := by
     by_contra hcl
-    push_neg at hcl
+    push Not at hcl
     interval_cases l <;> omega
   by_contra hcon
-  push_neg at hcon
+  push Not at hcon
   obtain ⟨c, hc, M₁, haux⟩ := SX.exists_aux_expSum hdl x y hx hy K hcon
-  obtain ⟨M₀, hdesc⟩ := SX.descent_step hdl x y hx hy K hcon c hc
+  obtain ⟨M₀, hdesc⟩ := SX.descent_step hdl x y hy K hcon c hc
   set M : ℕ := max M₀ M₁ + 1 with hMdef
   obtain ⟨L, hL0, hLc, p, ⟨lam0, hlam0mem, hlam0⟩, hph, hvan⟩ :=
     haux M (by omega)

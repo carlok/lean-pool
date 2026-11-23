@@ -34,7 +34,7 @@ noncomputable def chi (x : Fin d → ℂ) (y : Fin l → ℂ) (lam : Fin d → �
     Multiplicative (Fin l → ℕ) →* ℂ where
   toFun m := Complex.exp (SX.expExponent x lam * SX.latticeSum y (Multiplicative.toAdd m))
   map_one' := by
-    show Complex.exp (SX.expExponent x lam * SX.latticeSum y 0) = 1
+    change Complex.exp (SX.expExponent x lam * SX.latticeSum y 0) = 1
     simp [SX.latticeSum]
   map_mul' a b := by
     have hadd : SX.latticeSum y (Multiplicative.toAdd a + Multiplicative.toAdd b)
@@ -43,7 +43,7 @@ noncomputable def chi (x : Fin d → ℂ) (y : Fin l → ℂ) (lam : Fin d → �
       refine Finset.sum_congr rfl fun j _ => ?_
       simp only [Pi.add_apply]
       push_cast; ring
-    show Complex.exp _ = Complex.exp _ * Complex.exp _
+    change Complex.exp _ = Complex.exp _ * Complex.exp _
     rw [show Multiplicative.toAdd (a * b)
           = Multiplicative.toAdd a + Multiplicative.toAdd b from rfl,
       hadd, mul_add, Complex.exp_add]
@@ -69,7 +69,7 @@ theorem eq_zero_of_expSum_vanishes
       intro j
       have hls : SX.latticeSum y
           (Multiplicative.toAdd (Multiplicative.ofAdd (Pi.single j (1 : ℕ)))) = y j := by
-        show SX.latticeSum y (Pi.single j (1 : ℕ)) = y j
+        change SX.latticeSum y (Pi.single j (1 : ℕ)) = y j
         rw [SX.latticeSum, Finset.sum_eq_single j]
         · simp
         · intro b _ hb; simp [hb]
@@ -116,7 +116,7 @@ theorem eq_zero_of_expSum_vanishes
       have hsum : ∑ j, g j • y j = (0 : ℂ) := by
         rw [← Finset.sum_subset (Finset.subset_univ ({i0, i1} : Finset (Fin l)))]
         · rw [Finset.sum_pair hne]
-          simp only [hgdef, ite_eq_left rfl, ite_eq_right hne, ite_eq_right (Ne.symm hne)]
+          simp only [hgdef, ite_eq_left rfl, ite_eq_right (Ne.symm hne)]
           rw [Rat.smul_def, Rat.smul_def]
           push_cast
           linear_combination hcomb
@@ -126,7 +126,7 @@ theorem eq_zero_of_expSum_vanishes
       have hg := (Fintype.linearIndependent_iff.mp hy) g hsum
       have hn0z : n0 = 0 := by
         have := hg i1
-        simp only [hgdef, ite_eq_right (Ne.symm hne), ite_eq_left rfl] at this
+        simp only [hgdef, ite_eq_right (Ne.symm hne)] at this
         exact_mod_cast neg_eq_zero.mp this
       have hy0 : y i0 = 0 := by
         have : (SX.expExponent x lam - SX.expExponent x mu) * y i0 = 0 := by

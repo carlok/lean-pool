@@ -50,7 +50,7 @@ but not at some `w = ∑ m j • y j` with every `m j ≤ N`.
 theorem descent_step
     {d l : ℕ} (hdl : d + l < d * l)
     (x : Fin d → ℂ) (y : Fin l → ℂ)
-    (hx : LinearIndependent ℚ x) (hy : LinearIndependent ℚ y)
+    (hy : LinearIndependent ℚ y)
     (K : IntermediateField ℚ ℂ) [FiniteDimensional ℚ K]
     (hK : ∀ i j, Complex.exp (x i * y j) ∈ K)
     (c : ℝ) (hc : 0 < c) :

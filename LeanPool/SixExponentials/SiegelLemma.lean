@@ -46,7 +46,7 @@ theorem siegel_entrywise {α β : Type*} [Fintype α] [Fintype β] (A : Matrix �
       fun b => ?_⟩
     by_cases hb : b = b0
     · subst hb; simp; nlinarith
-    · simp [hb]; positivity
+    · simp [hb]; nlinarith
   · obtain ⟨t, ht0, hAt, hnorm⟩ :=
       Int.Matrix.exists_ne_zero_int_vec_norm_le A (by omega) hpos
     refine ⟨t, ht0, fun a => by simpa [Matrix.mulVec, dotProduct] using congrFun hAt a,

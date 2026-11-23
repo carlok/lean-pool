@@ -5,6 +5,7 @@ Authors: Carlo Perassi
 -/
 module
 
+public import Mathlib
 public import LeanPool.SixExponentials.Main
 
 /-!
