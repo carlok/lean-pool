@@ -14,8 +14,8 @@ The statements use Mathlib's own objects: `MvPolynomial (Fin 2) ℝ`, the real z
 - The quintic `Re(z³(|z|² + i)) = 0` has six rotations, which contradicts the degree restriction in Lemma 9 of Alcázar–Lávička–Vršek (arXiv:1801.09962v1).
 - The note's second theorem (Möbius symmetries and genus of the extremal family) is not part of this PR.
 
-**Port** from `carlok/sharp-symmetry-bounds-lean` at `ced9fe2` (the Palomar commit):
-- The 30 library modules are kept, with their proofs unchanged except where Lean/Mathlib v4.36 and the pool's linters required it. Those changes are listed below.
+**Port** from `carlok/sharp-symmetry-bounds-lean` at `26deee2`. That is the Palomar commit `ced9fe2` plus my upstream bump to Lean/Mathlib v4.34, which edited proof scripts in 18 files for compatibility: renamed lemmas such as `Polynomial.finite_setOfPred_isRoot`, `let` for `letI`, explicit `Complex.star_def` rewrites, and updated `simp` sets. The registered statements are unchanged.
+- The 30 library modules are kept with those proofs; this port changes no proof script.
 - Each file now has the module system, the four-line header, and a module docstring.
 - `set_option autoImplicit false` and `#print axioms` lines are removed.
 - The `Challenge`/`Solution` pair is replaced by `Theorem1.lean`, which keeps the registered statements unchanged.
@@ -25,9 +25,9 @@ The statements use Mathlib's own objects: `MvPolynomial (Fin 2) ℝ`, the real z
 - Module system, the four-line header and a module docstring in every file.
 - Docstrings for 41 definitions (`docBlame`), and lines wrapped to 100 characters.
 - `set_option autoImplicit false` and `#print axioms` lines removed.
-- No proof changed; the five statements are the ones registered with Palomar.
+- No proof script changed by this port. The five theorem statements are Palomar's comparison targets, unchanged; the four definitions they use come from the registered Challenge.
 
-**Checks run locally** with Lean v4.36.0 and Mathlib v4.36.0, using the pool's `[leanOptions]` (`warningAsError`, `weak.linter.mathlibStandardSet`):
+**Checks run** on GitHub Actions with Lean v4.36.0 and Mathlib v4.36.0, using the pool's `[leanOptions]` (`warningAsError`, `weak.linter.mathlibStandardSet`):
 
 - `lake build LeanPool.SharpSymmetryBounds.Imports` with Lean v4.36.0, Mathlib v4.36.0 and the pool's `[leanOptions]` (`weak.linter.mathlibStandardSet`; the build reports no warnings, so it passes with `warningAsError`), with the `LeanPoolLinters` plugin loaded.
 - `scripts/ci/lint-project.lean` (Batteries' slow declaration linters) passes for every module of the project.
