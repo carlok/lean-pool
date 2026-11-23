@@ -1,0 +1,42 @@
+name: Scratch check of draft projects
+
+on:
+  push:
+    branches: [ci-scratch]
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+      - name: Install elan
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh \
+            | sh -s -- -y --default-toolchain none
+      - name: Mathlib cache
+        run: ~/.elan/bin/lake exe cache get
+      - name: Pool linter plugin
+        run: ~/.elan/bin/lake build LeanPoolLinters:shared
+      - name: Build Magma1518
+        continue-on-error: true
+        run: ~/.elan/bin/lake build LeanPool.Magma1518.Imports 2>&1 | tee build-magma.log
+      - name: Build SharpSymmetryBounds
+        continue-on-error: true
+        run: ~/.elan/bin/lake build LeanPool.SharpSymmetryBounds.Imports 2>&1 | tee build-sym.log
+      - name: Build SixExponentials
+        continue-on-error: true
+        run: ~/.elan/bin/lake build -v LeanPool.SixExponentials.Imports 2>&1 | tee build-six.log
+      - name: Declaration linter
+        continue-on-error: true
+        run: |
+          for p in Magma1518 SharpSymmetryBounds SixExponentials; do
+            mods=$(grep -o "LeanPool\.$p[A-Za-z0-9.]*" LeanPool/$p/Imports.lean | sort -u | tr '\n' ' ')
+            echo "== $p"; ~/.elan/bin/lake env lean --run scripts/ci/lint-project.lean $mods || true
+          done
+      - name: Text style
+        continue-on-error: true
+        run: ~/.elan/bin/lake exe lint-style LeanPool 2>&1 | grep -E 'Magma1518|SharpSymmetryBounds|SixExponentials' || true
