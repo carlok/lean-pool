@@ -5,7 +5,12 @@ Authors: Carlo Perassi
 -/
 module
 
-public import Mathlib
+public import Mathlib.Analysis.CStarAlgebra.Classes
+public import Mathlib.Analysis.Calculus.FDeriv.Defs
+public import Mathlib.Analysis.SpecialFunctions.Pow.Real
+import Mathlib.Analysis.SpecialFunctions.ExpDeriv
+import Mathlib.RingTheory.WittVector.IsPoly
+import Mathlib.Tactic.ReduceModChar
 
 /-!
 # Definitions for Schneider's method
@@ -95,5 +100,3 @@ theorem exp_expExponent_mul_latticeSum (x : Fin d → ℂ) (y : Fin l → ℂ)
   exact Finset.prod_congr rfl fun j _ => Complex.exp_nat_mul _ _
 
 end SixExponentials.SX
-
-#min_imports

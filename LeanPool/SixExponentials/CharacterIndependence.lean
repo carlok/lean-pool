@@ -5,8 +5,13 @@ Authors: Carlo Perassi
 -/
 module
 
-public import Mathlib
 public import LeanPool.SixExponentials.Defs
+import Mathlib.Combinatorics.SimpleGraph.Basic
+import Mathlib.RingTheory.SimpleRing.Principal
+import Mathlib.RingTheory.WittVector.IsPoly
+import Mathlib.Tactic.Basify
+import Mathlib.Tactic.ENatToNat
+import Mathlib.Tactic.ReduceModChar
 
 /-!
 # Vanishing on the whole lattice
@@ -148,5 +153,3 @@ theorem eq_zero_of_expSum_vanishes
   exact_mod_cast this
 
 end SixExponentials.SX
-
-#min_imports

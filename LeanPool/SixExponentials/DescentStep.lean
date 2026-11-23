@@ -5,11 +5,20 @@ Authors: Carlo Perassi
 -/
 module
 
-public import Mathlib
 public import LeanPool.SixExponentials.Defs
-public import LeanPool.SixExponentials.GridEstimate
-public import LeanPool.SixExponentials.HouseBounds
-public import LeanPool.SixExponentials.Liouville
+public import Mathlib.FieldTheory.IntermediateField.Basic
+public import Mathlib.LinearAlgebra.FiniteDimensional.Defs
+import LeanPool.SixExponentials.GridEstimate
+import LeanPool.SixExponentials.HouseBounds
+import LeanPool.SixExponentials.Liouville
+import Mathlib.Algebra.Order.Star.Real
+import Mathlib.RingTheory.Flat.TorsionFree
+import Mathlib.RingTheory.PiTensorProduct
+import Mathlib.RingTheory.SimpleRing.Principal
+import Mathlib.RingTheory.WittVector.IsPoly
+import Mathlib.Tactic.Monotonicity.Lemmas
+import Mathlib.Tactic.Polynomial.Basic
+import Mathlib.Tactic.ReduceModChar
 
 /-!
 # Extending the zeros
@@ -69,7 +78,8 @@ theorem descent_step
   obtain ⟨b, hb0, -, H, hH1, hbH⟩ := Transcendence.exists_denom_house_monomial_le θ
   set G : ℝ := max 1 (house b) * H
   have hHG : H ≤ G := le_mul_of_one_le_left (by positivity) (le_max_left 1 (house b))
-  have hbG : house b ≤ G := (le_max_right 1 (house b)).trans (le_mul_of_one_le_right (by positivity) hH1)
+  have hbG : house b ≤ G :=
+    (le_max_right 1 (house b)).trans (le_mul_of_one_le_right (by positivity) hH1)
   have hG1 : 1 ≤ G := hH1.trans hHG
   set X := ∑ i, ‖x i‖
   set Y := ∑ j, ‖y j‖
@@ -83,7 +93,8 @@ theorem descent_step
   have hN1 : (1 : ℝ) ≤ N := by exact_mod_cast (Nat.succ_pos _).trans_le (hM.trans hMN)
   have hL1 : (1 : ℝ) ≤ L := by exact_mod_cast hL
   set B : ℝ := (L : ℝ) ^ d * Real.exp (c * L * M) with hB
-  have hB1 : 1 ≤ B := one_le_mul_of_one_le_of_one_le (one_le_pow₀ hL1) (Real.one_le_exp (by positivity))
+  have hB1 : 1 ≤ B :=
+    one_le_mul_of_one_le_of_one_le (one_le_pow₀ hL1) (Real.one_le_exp (by positivity))
   have hpB : ∑ lam ∈ SX.box d L, |(p lam : ℝ)| ≤ B := by
     refine (Finset.sum_le_card_nsmul _ _ _ fun lam _ => hp lam).trans_eq ?_
     simp [SX.box, Fintype.card_piFinset, hB]
@@ -100,7 +111,8 @@ theorem descent_step
       refine h.trans ?_
       gcongr
     · rw [SX.mem_box] at hlam
-      refine (norm_sum_le _ _).trans ((Finset.sum_le_sum fun i _ => ?_).trans_eq (Finset.mul_sum _ _ _).symm)
+      refine (norm_sum_le _ _).trans
+        ((Finset.sum_le_sum fun i _ => ?_).trans_eq (Finset.mul_sum _ _ _).symm)
       rw [norm_mul, Complex.norm_natCast]
       exact mul_le_mul_of_nonneg_right (by exact_mod_cast (hlam i).le) (norm_nonneg _)
     · rw [Nat.lt_one_iff.1 hi, iteratedDeriv_zero]; exact hvan m' hm'
@@ -117,7 +129,8 @@ theorem descent_step
     rw [map_mul, map_intCast, map_prod, SX.exp_expExponent_mul_latticeSum, Fintype.prod_prod_type]
     rfl
   have hβ0 : β ≠ 0 := fun h => hne (by rw [← hσβ, h, map_zero])
-  have hδ : b ^ E * β = ∑ lam ∈ SX.box d L, (p lam : K) * (b ^ E * ∏ ij, θ ij ^ (lam ij.1 * m ij.2)) := by
+  have hδ : b ^ E * β =
+      ∑ lam ∈ SX.box d L, (p lam : K) * (b ^ E * ∏ ij, θ ij ^ (lam ij.1 * m ij.2)) := by
     rw [hβ, Finset.mul_sum]; exact Finset.sum_congr rfl fun _ _ => by ring
   have hint : IsIntegral ℤ (((1 : ℤ) : K) * (b ^ E * β)) := by
     rw [Int.cast_one, one_mul, hδ]
@@ -125,12 +138,14 @@ theorem descent_step
       (isIntegral_algebraMap (x := p lam)).mul (hbH _ E (heE lam hlam)).1
   have hhouse : house (b ^ E * β) ≤ B * G ^ E := by
     rw [hδ]
-    refine (house_sum_le_sum_house _ _).trans ((Finset.sum_le_sum (g := fun lam => |(p lam : ℝ)| * G ^ E)
+    refine (house_sum_le_sum_house _ _).trans
+      ((Finset.sum_le_sum (g := fun lam => |(p lam : ℝ)| * G ^ E)
       fun lam hlam => (house_mul_le _ _).trans ?_).trans ?_)
     · rw [house_intCast, Int.cast_abs]
       exact mul_le_mul_of_nonneg_left ((hbH _ E (heE lam hlam)).2.trans (by gcongr)) (abs_nonneg _)
     · rw [← Finset.sum_mul]; exact mul_le_mul_of_nonneg_right hpB (by positivity)
-  have hliou := Transcendence.liouville_house (mul_ne_zero (pow_ne_zero E hb0) hβ0) one_ne_zero hint σ
+  have hliou :=
+    Transcendence.liouville_house (mul_ne_zero (pow_ne_zero E hb0) hβ0) one_ne_zero hint σ
   rw [Int.cast_one, abs_one, one_pow, one_mul, map_mul, map_pow, norm_mul, norm_pow, hσβ] at hliou
   -- combining the two bounds: `2 ^ (N ^ l) ≤ exp (C L N)`
   obtain ⟨k, hk⟩ := Nat.exists_eq_add_of_le hrk1
@@ -145,7 +160,8 @@ theorem descent_step
     exact mul_le_mul (pow_le_pow_left₀ (by positivity) h1 d) (Real.exp_le_exp.2 h2) (by positivity)
       (by positivity)
   have hkey : (2 : ℝ) ^ (N ^ l) ≤ Real.exp (C * (L * N)) := by
-    have hσb : ‖σ b‖ ^ E ≤ G ^ E := pow_le_pow_left₀ (norm_nonneg _) ((norm_embedding_le_house b σ).trans hbG) E
+    have hσb : ‖σ b‖ ^ E ≤ G ^ E :=
+      pow_le_pow_left₀ (norm_nonneg _) ((norm_embedding_le_house b σ).trans hbG) E
     have hG0 : 0 ≤ G := by linarith
     have hB0 : 0 ≤ B := by linarith
     have h1 := hliou.trans (mul_le_mul (mul_le_mul hσb hup (norm_nonneg _) (pow_nonneg hG0 E))
@@ -160,9 +176,11 @@ theorem descent_step
           Real.exp (G.log) ^ (E * (1 + k)) * Real.exp (L * X * (4 * N * (2 * Y + 1))) := by
           rw [Real.exp_log (by positivity)]
           gcongr
-          exact (by linarith [Real.add_one_le_exp 1] : (2 : ℝ) ≤ Real.exp 1).trans (Real.exp_le_exp.2 hLN)
+          exact (by linarith [Real.add_one_le_exp 1] : (2 : ℝ) ≤ Real.exp 1).trans
+            (Real.exp_le_exp.2 hLN)
       _ = Real.exp (C * (L * N)) := by
-          rw [← Real.exp_nat_mul, ← Real.exp_nat_mul, ← Real.exp_add, ← Real.exp_add, ← Real.exp_add,
+          rw [← Real.exp_nat_mul, ← Real.exp_nat_mul, ← Real.exp_add, ← Real.exp_add,
+            ← Real.exp_add,
             hC, hk, hE]
           push_cast; ring_nf
   -- the endgame: `N ^ l log 2 ≤ C L N` and `L ^ d ≤ c N ^ l` force `N (log 2) ^ d ≤ C ^ d c`
@@ -189,5 +207,3 @@ theorem descent_step
   linarith
 
 end SixExponentials.SX
-
-#min_imports

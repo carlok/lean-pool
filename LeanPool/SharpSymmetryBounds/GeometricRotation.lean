@@ -21,6 +21,7 @@ namespace CurveSymmetry
 
 open MvPolynomial
 
+/-- Conjugate the coefficients and swap the two variables `X`, `Y`. -/
 noncomputable def conjugateSwap : BPoly →+* BPoly :=
   (MvPolynomial.map (starRingEnd ℂ)).comp
     (rename (Equiv.swap (0 : Fin 2) 1)).toRingHom

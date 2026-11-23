@@ -20,11 +20,14 @@ namespace CurveSymmetry
 
 open MvPolynomial
 
+/-- Real polynomials in the Cartesian coordinates `x`, `y`. -/
 abbrev RPoly := MvPolynomial (Fin 2) ℝ
 
+/-- A real Cartesian polynomial written in the complex coordinates `z`, `conj z`. -/
 noncomputable def complexifyReal (f : RPoly) : BPoly :=
   complexify (map Complex.ofRealHom f)
 
+/-- The real zero set `{x + i y | f(x, y) = 0}` of a real Cartesian polynomial, inside `ℂ`. -/
 def cartesianLocus (f : RPoly) : Set ℂ :=
   {z | eval (fun i : Fin 2 => if i = 0 then z.re else z.im) f = 0}
 
@@ -33,7 +36,8 @@ def GeometricallyIrreducible (f : RPoly) : Prop :=
   Irreducible (map Complex.ofRealHom f)
 
 lemma real_map_degree (f : RPoly) : (map Complex.ofRealHom f).totalDegree = f.totalDegree := by
-  simp only [totalDegree, support_map_of_injective f (f := Complex.ofRealHom) Complex.ofReal_injective]
+  simp only [totalDegree,
+    support_map_of_injective f (f := Complex.ofRealHom) Complex.ofReal_injective]
 
 lemma complexifyReal_degree (f : RPoly) : (complexifyReal f).totalDegree = f.totalDegree := by
   rw [complexifyReal, complexify_degree, real_map_degree]
@@ -55,6 +59,7 @@ lemma complexifyReal_locus (f : RPoly) : realLocus (complexifyReal f) = cartesia
   change eval _ (complexify (map Complex.ofRealHom f)) = 0 ↔ eval _ f = 0
   rw [eval_complexify, eval_real_map, Complex.ofReal_eq_zero]
 
+/-- Affine parameters `(a, b)` of the direct symmetries `z ↦ a z + b` of the Cartesian locus. -/
 abbrev CartesianDirectSymmetries (f : RPoly) :=
   {ab : ℂ × ℂ // DirectSymmetry (cartesianLocus f) ab.1 ab.2}
 

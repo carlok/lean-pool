@@ -5,8 +5,12 @@ Authors: Carlo Perassi
 -/
 module
 
-public import Mathlib
-public import LeanPool.SixExponentials.Main
+public import Mathlib.Analysis.CStarAlgebra.Classes
+public import Mathlib.Analysis.Complex.Exponential
+public import Mathlib.RingTheory.Algebraic.Defs
+import LeanPool.SixExponentials.Main
+import LeanPool.SixExponentials.NumberField
+import Mathlib.FieldTheory.IntermediateField.Adjoin.Basic
 
 /-!
 # The six exponentials theorem: statements
@@ -50,5 +54,3 @@ theorem six_exponentials_theorem (x : Fin 2 → ℂ) (y : Fin 3 → ℂ)
   six_exponentials x y hx hy
 
 end SixExponentials
-
-#min_imports

@@ -44,13 +44,16 @@ lemma irreducible_of_reverse {R : Type*} [CommRing R] [IsDomain R]
     · exact Or.inl (unit_of_reverse_unit (mul_ne_zero_iff.mp hcoeff).1 ha)
     · exact Or.inr (unit_of_reverse_unit (mul_ne_zero_iff.mp hcoeff).2 hb)
 
+/-- The coefficient `α t^m + conj α` of the strict transform of the extremal family. -/
 noncomputable def familyA (m : ℕ) (α : ℂ) : UPoly := C α * X ^ m + C (star α)
+/-- The coefficient `t (t^m + 1)` of the strict transform of the extremal family. -/
 noncomputable def familyB (m : ℕ) : UPoly := X * (X ^ m + 1)
 
 /-- The strict-transform equation after the substitution `X = tY`. -/
 noncomputable def familyQuadratic (m : ℕ) (α : ℂ) : NPoly :=
   C (familyA m α) + C (familyB m) * X ^ 2
 
+/-- The strict-transform equation with the quadratic variable reversed. -/
 noncomputable def familyReciprocal (m : ℕ) (α : ℂ) : NPoly :=
   C (familyB m) + C (familyA m α) * X ^ 2
 

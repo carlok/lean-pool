@@ -22,13 +22,18 @@ namespace CurveSymmetry
 
 open MvPolynomial
 
+/-- Complex polynomials in one variable. -/
 abbrev UPoly := Polynomial ℂ
+/-- Polynomials over `UPoly`: plane polynomials with one variable singled out. -/
 abbrev NPoly := Polynomial UPoly
+/-- The fraction field `ℂ(Y)` of `UPoly`. -/
 abbrev CoeffField := FractionRing UPoly
 
+/-- Plane polynomials as polynomials in `X` with coefficients in `ℂ[Y]`. -/
 noncomputable def toNested : BPoly ≃ₐ[ℂ] NPoly :=
   (finSuccEquiv ℂ 1).trans (Polynomial.mapAlgEquiv (uniqueAlgEquiv ℂ (Fin 1)))
 
+/-- Evaluation of a nested polynomial at `X = x`, `Y = y`. -/
 noncomputable def nestedEval (x y : ℂ) : NPoly →+* ℂ :=
   Polynomial.eval₂RingHom (Polynomial.evalRingHom y) x
 

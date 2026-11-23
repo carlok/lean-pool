@@ -5,10 +5,19 @@ Authors: Carlo Perassi
 -/
 module
 
-public import Mathlib
 public import LeanPool.SixExponentials.Defs
-public import LeanPool.SixExponentials.HouseBounds
-public import LeanPool.SixExponentials.SiegelLemma
+public import Mathlib.NumberTheory.NumberField.House
+import LeanPool.SixExponentials.HouseBounds
+import LeanPool.SixExponentials.SiegelLemma
+import Mathlib.Algebra.Order.Star.Int
+import Mathlib.RingTheory.Flat.TorsionFree
+import Mathlib.RingTheory.SimpleRing.Principal
+import Mathlib.RingTheory.WittVector.IsPoly
+import Mathlib.Tactic.Basify
+import Mathlib.Tactic.ENatToNat
+import Mathlib.Tactic.Monotonicity.Lemmas
+import Mathlib.Tactic.ReduceModChar
+import Mathlib.Topology.Sheaves.Presheaf
 
 /-!
 # The auxiliary function
@@ -37,7 +46,7 @@ A common denominator `b` of the numbers `exp (x i * y j)` makes each coefficient
 `b ^ T ∏ exp (x i * y j) ^ (λ i * m j)`, with `T = d l L M`, an algebraic integer of house at most
 `H ^ T`. Written in an integral basis of `K`, each equation becomes `n` equations over `ℤ` whose
 entries are bounded by a constant times `H ^ T`, and there are still at least twice as many
-unknowns as equations. Siegel's lemma gives a nonzero exists_aux_expSum of size at most `L ^ d` times that
+unknowns as equations. Siegel's lemma gives a nonzero solution of size at most `L ^ d` times that
 bound, which is `exp (O (L M))`. Finally
 `exp (⟨λ, x⟩ ∑_j m j y j) = ∏_{i,j} exp (x i * y j) ^ (λ i * m j)`,
 so the equations say that the exponential sum `SX.expSum x L p` vanishes at `SX.latticeSum y m`.
@@ -51,7 +60,7 @@ open NumberField Transcendence
 
 /-- Siegel's lemma over a number field, with rational integer unknowns. A system of linear
 equations with algebraic integer coefficients of house at most `A`, with at least `2 [K : ℚ]`
-times as many unknowns as equations, has a nonzero integer exists_aux_expSum whose entries are at most
+times as many unknowns as equations, has a nonzero integer solution whose entries are at most
 the number of unknowns times `max 1 (c_K A)`. The constant `c_K` is `[K : ℚ]` times the largest
 entry of the inverse transpose of the matrix `(σ ω)`, `σ` running over the complex embeddings and
 `ω` over an integral basis: it bounds the integer coordinates of an algebraic integer by its
@@ -215,5 +224,3 @@ theorem exists_aux_expSum
     rfl
 
 end SixExponentials.SX
-
-#min_imports

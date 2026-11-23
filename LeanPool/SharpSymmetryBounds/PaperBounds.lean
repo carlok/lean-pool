@@ -55,6 +55,7 @@ lemma mem_direct_isometry_iff_det (S : Set ℂ) (f : ℂ ≃ᵢ ℂ) :
       LinearEquiv.det f.toRealLinearIsometryEquiv.toLinearEquiv = 1 := by
   exact and_congr_right (fun _ => direct_form_iff_det f)
 
+/-- The extremal curve `Re(z^m (|z|^2 + α)) = 0`. -/
 def extremalCurve (m : ℕ) (α : ℂ) : Set ℂ :=
   {z | (z ^ m * ((‖z‖ : ℂ) ^ 2 + α)).re = 0}
 
@@ -82,7 +83,8 @@ theorem paper_sharp_bounds {f : RPoly} (hf : GeometricallyIrreducible f)
     Finite (isometrySetGroup (cartesianLocus f)) ∧
       Finite (directIsometryGroup (cartesianLocus f)) ∧
       IsCyclic (directIsometryGroup (cartesianLocus f)) ∧
-      Nat.card (directIsometryGroup (cartesianLocus f)) ≤ max f.totalDegree (2 * f.totalDegree - 4) ∧
+      Nat.card (directIsometryGroup (cartesianLocus f)) ≤
+        max f.totalDegree (2 * f.totalDegree - 4) ∧
       Nat.card (isometrySetGroup (cartesianLocus f)) ≤ 2 * f.totalDegree := by
   obtain ⟨hfull, hbfull⟩ := cartesian_isometry_bound hf hd hinf hnc
   obtain ⟨hdir, hcyc, hbdir⟩ := cartesian_direct_isometry_bound hf hd hinf hnc

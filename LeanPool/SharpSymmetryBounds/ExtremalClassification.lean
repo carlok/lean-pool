@@ -74,7 +74,8 @@ theorem extremal_classification {P : BPoly} (hP : Irreducible P)
     (hd : 5 ≤ P.totalDegree) (hinf : (realLocus P).Infinite) (hcircle : NotCircle P)
     (hcard : Nat.card (DirectSymmetries P) = 2 * P.totalDegree - 4) :
     ∃ c t α : ℂ, c ≠ 0 ∧ ‖α‖ = 1 ∧ α ≠ star α ∧
-      realLocus P = (fun z : ℂ => c * z + t) '' realLocus (familyPolynomial (P.totalDegree - 2) α) := by
+      realLocus P =
+        (fun z : ℂ => c * z + t) '' realLocus (familyPolynomial (P.totalDegree - 2) α) := by
   obtain ⟨t, ht⟩ := direct_symmetries_common_center hP (by omega) hinf.nonempty
   have hirr : Irreducible (shift t P) := hP.map (shiftEquiv t).toMulEquiv
   have hdegree : (shift t P).totalDegree = (P.totalDegree - 2) + 2 := by rw [shift_degree]; omega

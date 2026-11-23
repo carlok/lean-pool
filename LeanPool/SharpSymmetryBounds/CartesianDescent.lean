@@ -30,6 +30,7 @@ lemma cartesianize_conjugateSwap (P : BPoly) :
       congr 1
       fin_cases i <;> simp [conjugateSwap, sub_eq_add_neg]
 
+/-- The real parts of the coefficients of a plane polynomial, as a real polynomial. -/
 noncomputable def realCoefficients (P : BPoly) : RPoly :=
   .ofCoeff (Finsupp.mapRange Complex.re (by simp) (AddMonoidAlgebra.coeff P))
 

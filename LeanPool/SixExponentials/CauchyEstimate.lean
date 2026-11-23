@@ -5,7 +5,18 @@ Authors: Carlo Perassi
 -/
 module
 
-public import Mathlib
+public import Mathlib.Analysis.Analytic.Order
+public import Mathlib.Analysis.CStarAlgebra.Classes
+import Mathlib.Analysis.Complex.AbsMax
+import Mathlib.Analysis.Complex.Liouville
+import Mathlib.Analysis.Complex.RemovableSingularity
+import Mathlib.RingTheory.WittVector.IsPoly
+import Mathlib.Tactic.Basify
+import Mathlib.Tactic.ENatToNat
+import Mathlib.Tactic.Monotonicity.Lemmas
+import Mathlib.Tactic.ReduceModChar
+import Mathlib.Topology.Sheaves.Presheaf
+import Std.Tactic.BVDecide.Normalize.Prop
 
 /-!
 # A Cauchy estimate with zeros
@@ -97,7 +108,8 @@ theorem cauchy_estimate_with_zeros
     (S : Finset ℂ) (hS : ∀ z ∈ S, ‖z - c‖ ≤ ρ)
     (hM : ∀ z : ℂ, ‖z - c‖ = R → ‖F z‖ ≤ M) (s : ℕ) :
     ‖iteratedDeriv s F c‖
-      ≤ (s.factorial : ℝ) * (R / (R - 1)) * ((ρ + 1) / (R - ρ)) ^ (∑ z ∈ S, analyticOrderNatAt F z) * M := by
+      ≤ (s.factorial : ℝ) * (R / (R - 1)) *
+          ((ρ + 1) / (R - ρ)) ^ (∑ z ∈ S, analyticOrderNatAt F z) * M := by
   obtain ⟨G, hG, hfac⟩ := FourExpCauchy.factor S (analyticOrderNatAt F) F hF (fun a _ => by
     unfold analyticOrderNatAt
     generalize analyticOrderAt F a = x
@@ -164,5 +176,3 @@ theorem cauchy_estimate_with_zeros
     _ = s.factorial * (R / (R - 1)) * ((ρ + 1) / (R - ρ)) ^ N * M := by ring
 
 end SixExponentials
-
-#min_imports

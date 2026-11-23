@@ -88,7 +88,8 @@ theorem fermat_full_card {d : ℕ} (hd : 2 ≤ d) :
   let g : OppositeSymmetries (fermatPolynomial d) := ⟨(1, 0), fermat_conjugation d⟩
   let : Finite (OppositeSymmetries (fermatPolynomial d)) := Finite.of_injective
     (oppositeDirectEquiv _ g) (oppositeDirectEquiv _ g).injective
-  change Nat.card (DirectSymmetries (fermatPolynomial d) ⊕ OppositeSymmetries (fermatPolynomial d)) = _
+  change Nat.card
+    (DirectSymmetries (fermatPolynomial d) ⊕ OppositeSymmetries (fermatPolynomial d)) = _
   rw [Nat.card_sum, Nat.card_congr (oppositeDirectEquiv _ g), fermat_direct_card hd]
   omega
 

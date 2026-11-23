@@ -45,7 +45,8 @@ theorem family_degree {m : ℕ} (hm : 0 < m) (α : ℂ) :
   have hB : B.totalDegree ≤ m + 2 := by
     simp [B, totalDegree_monomial, exponent_degree, Nat.add_assoc]
   have hD : D.totalDegree ≤ m := by
-    simpa [D, Function.id_def, exponent_degree] using totalDegree_monomial_le (exponent 0 m) (star α)
+    simpa [D, Function.id_def, exponent_degree] using
+      totalDegree_monomial_le (exponent 0 m) (star α)
   have hE : E.totalDegree ≤ m + 2 := by
     simp [E, totalDegree_monomial, exponent_degree, Nat.add_left_comm]
   have hab := totalDegree_add A B

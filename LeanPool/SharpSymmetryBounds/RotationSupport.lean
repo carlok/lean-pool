@@ -24,9 +24,12 @@ namespace CurveSymmetry
 
 open MvPolynomial
 
+/-- Complex plane polynomials in the coordinates `X = z`, `Y = conj z`. -/
 abbrev BPoly := MvPolynomial (Fin 2) ℂ
+/-- Exponents of monomials in two variables. -/
 abbrev Exponent := Fin 2 →₀ ℕ
 
+/-- Rotation by `ζ` in complex coordinates: `X ↦ ζ X`, `Y ↦ ζ⁻¹ Y`. -/
 noncomputable def rotate (ζ : ℂ) : BPoly →+* BPoly :=
   eval₂Hom C (fun i => C (if i = 0 then ζ else ζ⁻¹) * X i)
 
@@ -117,6 +120,7 @@ theorem anti_degree_gap {m : ℕ} (hm : 0 < m) {ζ : ℂ}
   simp only [Finsupp.weight_apply, Pi.one_apply, smul_eq_mul, mul_one]
   exact (exponent_degree s).trans he
 
+/-- The exponent of the monomial `X^a Y^b`. -/
 noncomputable def exponent (a b : ℕ) : Exponent :=
   Finsupp.single 0 a + Finsupp.single 1 b
 

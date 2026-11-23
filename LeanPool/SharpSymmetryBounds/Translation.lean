@@ -20,6 +20,7 @@ namespace CurveSymmetry
 
 open MvPolynomial
 
+/-- Restriction of a plane polynomial to the line `t ↦ z + t v`. -/
 noncomputable def lineRestriction (z v : ℂ) : BPoly →+* Polynomial ℂ :=
   eval₂Hom Polynomial.C (fun i : Fin 2 =>
     Polynomial.C (if i = 0 then z else star z) +
@@ -35,6 +36,7 @@ lemma eval_lineRestriction (P : BPoly) (z v t : ℂ) :
       simp only [map_mul, Polynomial.eval_mul, hP]
       fin_cases i <;> simp [lineRestriction]
 
+/-- An equation of the real line through `z` with direction `v`. -/
 noncomputable def lineEquation (z v : ℂ) : BPoly :=
   C (star v) * X 0 - C v * X 1 - C (star v * z - v * star z)
 
@@ -94,7 +96,8 @@ lemma lineEquation_realLocus_infinite (z v : ℂ) (hv : v ≠ 0) :
   simp only [star_add, star_mul, star_natCast]
   ring
 
-/-- A nontrivial translation cannot preserve an irreducible real plane curve of degree at least two. -/
+/-- A nontrivial translation cannot preserve an irreducible real plane curve of degree at least
+two. -/
 theorem no_translation_symmetry {P : BPoly} (hP : Irreducible P)
     (hd : 2 ≤ P.totalDegree) (hne : (realLocus P).Nonempty) {v : ℂ}
     (htrans : ∀ z ∈ realLocus P, z + v ∈ realLocus P) : v = 0 := by

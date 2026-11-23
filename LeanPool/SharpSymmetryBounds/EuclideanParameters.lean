@@ -22,6 +22,7 @@ namespace CurveSymmetry
 def OppositeSymmetry (S : Set ℂ) (a b : ℂ) : Prop :=
   ‖a‖ = 1 ∧ ∀ z : ℂ, a * star z + b ∈ S ↔ z ∈ S
 
+/-- Affine parameters `(a, b)` of the opposite symmetries `z ↦ a conj z + b` of the locus. -/
 abbrev OppositeSymmetries (P : BPoly) :=
   {ab : ℂ × ℂ // OppositeSymmetry (realLocus P) ab.1 ab.2}
 

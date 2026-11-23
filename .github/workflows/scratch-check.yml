@@ -21,11 +21,6 @@ jobs:
         run: ~/.elan/bin/lake exe cache get
       - name: Pool linter plugin
         run: ~/.elan/bin/lake build LeanPoolLinters:shared
-      - name: Settle SixExponentials imports layer by layer
-        continue-on-error: true
-        run: |
-          python3 scripts/scratch_min_imports.py
-          for f in LeanPool/SixExponentials/*.lean; do echo "== $f"; grep -E '^(public )?import' "$f"; done
       - name: Build Magma1518
         continue-on-error: true
         run: ~/.elan/bin/lake build LeanPool.Magma1518.Imports 2>&1 | tee build-magma.log

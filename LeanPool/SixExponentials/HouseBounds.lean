@@ -5,7 +5,10 @@ Authors: Carlo Perassi
 -/
 module
 
-public import Mathlib
+public import Mathlib.NumberTheory.NumberField.House
+import Mathlib.Analysis.CStarAlgebra.Classes
+import Mathlib.RingTheory.SimpleRing.Principal
+import Mathlib.Tactic.Monotonicity.Lemmas
 
 /-!
 # Houses and denominators
@@ -42,7 +45,8 @@ end S7W4_exists_denom_house_monomial_le
 open S7W4_exists_denom_house_monomial_le in
 theorem exists_denom_house_monomial_le {K ι : Type*} [Field K] [NumberField K] [Fintype ι]
     (θ : ι → K) : ∃ b : K, b ≠ 0 ∧ IsIntegral ℤ b ∧ ∃ H : ℝ, 1 ≤ H ∧ ∀ (e : ι → ℕ) (E : ℕ),
-      ∑ i, e i ≤ E → IsIntegral ℤ (b ^ E * ∏ i, θ i ^ e i) ∧ house (b ^ E * ∏ i, θ i ^ e i) ≤ H ^ E := by
+      ∑ i, e i ≤ E →
+        IsIntegral ℤ (b ^ E * ∏ i, θ i ^ e i) ∧ house (b ^ E * ∏ i, θ i ^ e i) ≤ H ^ E := by
   classical
   -- a non-zero integer clearing the denominators of all the `θ i`
   have : Algebra.IsAlgebraic ℤ K := (IsFractionRing.comap_isAlgebraic_iff (K := ℚ)).2 inferInstance
@@ -78,5 +82,3 @@ theorem exists_denom_house_monomial_le {K ι : Type*} [Field K] [NumberField K] 
     _ = H ^ E := by rw [Finset.prod_pow_eq_pow_sum, ← pow_add, Nat.sub_add_cancel hE]
 
 end SixExponentials.Transcendence
-
-#min_imports

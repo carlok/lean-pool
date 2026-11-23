@@ -19,6 +19,7 @@ namespace CurveSymmetry
 
 open Polynomial
 
+/-- The Fermat-type polynomial `X^d + Y^d - 2` in nested form. -/
 noncomputable def fermatNested (d : ℕ) : NPoly := X ^ d + C (X ^ d - C 2)
 
 theorem fermatNested_irreducible {d : ℕ} (hd : 0 < d) : Irreducible (fermatNested d) := by
@@ -55,6 +56,7 @@ theorem fermatNested_irreducible {d : ℕ} (hd : 0 < d) : Irreducible (fermatNes
     simp [IsRoot, derivative_X_pow, hdn, hn] at he
   · exact hmonic.isPrimitive
 
+/-- The Fermat-type polynomial `X^d + Y^d - 2`, whose real locus is `Re(z^d) = 1`. -/
 noncomputable def fermatPolynomial (d : ℕ) : BPoly :=
   MvPolynomial.X 0 ^ d + MvPolynomial.X 1 ^ d - MvPolynomial.C 2
 
@@ -110,7 +112,8 @@ theorem fermat_degree {d : ℕ} (hd : 0 < d) : (fermatPolynomial d).totalDegree 
     (MvPolynomial.X 0 ^ d + MvPolynomial.X 1 ^ d : BPoly) 2
   simp only [MvPolynomial.totalDegree_X_pow, max_self] at hsum
   change (MvPolynomial.X 0 ^ d + MvPolynomial.X 1 ^ d - MvPolynomial.C 2 : BPoly).totalDegree = d
-  change d ≤ (MvPolynomial.X 0 ^ d + MvPolynomial.X 1 ^ d - MvPolynomial.C 2 : BPoly).totalDegree at hlo
+  change d ≤ (MvPolynomial.X 0 ^ d + MvPolynomial.X 1 ^ d - MvPolynomial.C 2 : BPoly).totalDegree
+    at hlo
   omega
 
 end CurveSymmetry

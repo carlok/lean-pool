@@ -44,6 +44,7 @@ def directIsometryGroup (S : Set ℂ) : Subgroup (ℂ ≃ᵢ ℂ) where
         f⁻¹ z = a⁻¹ * (a * (f⁻¹ z)) := by rw [← mul_assoc, inv_mul_cancel₀ ha0, one_mul]
         _ = a⁻¹ * z + -a⁻¹ * b := by linear_combination a⁻¹ * heq
 
+/-- The Mathlib isometry `z ↦ a z + b` attached to the parameters of a direct symmetry. -/
 noncomputable def directParametersToIsometry (P : BPoly) :
     DirectSymmetries P → directIsometryGroup (realLocus P) := fun u =>
   ⟨affineDirectIsometry u.val.1 u.val.2 u.prop.1,
@@ -65,6 +66,7 @@ lemma directParametersToIsometry_bijective (P : BPoly) :
     apply IsometryEquiv.ext
     exact fun z => (he z).symm
 
+/-- Direct-symmetry parameters are equivalent to the direct isometries preserving the locus. -/
 noncomputable def directIsometryEquiv (P : BPoly) :
     DirectSymmetries P ≃ directIsometryGroup (realLocus P) :=
   Equiv.ofBijective (directParametersToIsometry P) (directParametersToIsometry_bijective P)
@@ -75,6 +77,7 @@ lemma direct_isometry_formula {S : Set ℂ} (f : directIsometryGroup S) (z : ℂ
   rw [he z, he 1, he 0]
   ring
 
+/-- The linear coefficient `f 1 - f 0` of a direct isometry, as a monoid homomorphism. -/
 noncomputable def directSlope (S : Set ℂ) : directIsometryGroup S →* ℂ where
   toFun f := f.val 1 - f.val 0
   map_one' := by simp
@@ -120,7 +123,8 @@ theorem cartesian_direct_isometry_bound {f : RPoly} (hf : GeometricallyIrreducib
     (hnc : ¬ ∃ c : ℂ, ∃ R : ℝ, 0 < R ∧ cartesianLocus f = Metric.sphere c R) :
     Finite (directIsometryGroup (cartesianLocus f)) ∧
       IsCyclic (directIsometryGroup (cartesianLocus f)) ∧
-      Nat.card (directIsometryGroup (cartesianLocus f)) ≤ max f.totalDegree (2 * f.totalDegree - 4) := by
+      Nat.card (directIsometryGroup (cartesianLocus f)) ≤
+        max f.totalDegree (2 * f.totalDegree - 4) := by
   have h := direct_isometry_group_bound (complexifyReal_irreducible hf)
     (by rwa [complexifyReal_degree]) (by rwa [complexifyReal_locus])
     (by simpa only [NotCircle, complexifyReal_locus] using hnc)

@@ -31,14 +31,18 @@ def isometrySetGroup (S : Set ℂ) : Subgroup (ℂ ≃ᵢ ℂ) where
     intro f hf z
     simpa using (hf (f⁻¹ z)).symm
 
+/-- The subgroup of Mathlib isometries of `ℂ` mapping the real locus of `P` onto itself. -/
 abbrev isometrySymmetryGroup (P : BPoly) := isometrySetGroup (realLocus P)
 
+/-- The orientation-preserving isometry `z ↦ a z + b` of `ℂ`, for `‖a‖ = 1`. -/
 noncomputable def affineDirectIsometry (a b : ℂ) (ha : ‖a‖ = 1) : ℂ ≃ᵢ ℂ :=
-  (rotation ⟨a, by simpa [Submonoid.unitSphere] using ha⟩).toIsometryEquiv.trans (IsometryEquiv.addRight b)
+  (rotation ⟨a, by simpa [Submonoid.unitSphere] using ha⟩).toIsometryEquiv.trans
+    (IsometryEquiv.addRight b)
 
 @[simp] lemma affineDirectIsometry_apply (a b : ℂ) (ha : ‖a‖ = 1) (z : ℂ) :
     affineDirectIsometry a b ha z = a * z + b := rfl
 
+/-- The orientation-reversing isometry `z ↦ a conj z + b` of `ℂ`, for `‖a‖ = 1`. -/
 noncomputable def affineOppositeIsometry (a b : ℂ) (ha : ‖a‖ = 1) : ℂ ≃ᵢ ℂ :=
   Complex.conjLIE.toIsometryEquiv.trans (affineDirectIsometry a b ha)
 
@@ -92,6 +96,7 @@ lemma direct_ne_opposite {a b c d : ℂ} (ha : a ≠ 0)
   have hi := congrArg Complex.im (mul_left_cancel₀ ha he)
   norm_num at hi
 
+/-- The Mathlib isometry attached to the parameters of a direct or opposite symmetry. -/
 noncomputable def parametersToIsometry (P : BPoly) : EuclideanSymmetries P → isometrySymmetryGroup P
   | Sum.inl u => ⟨affineDirectIsometry u.val.1 u.val.2 u.prop.1, u.prop.2⟩
   | Sum.inr u => ⟨affineOppositeIsometry u.val.1 u.val.2 u.prop.1, u.prop.2⟩
@@ -107,10 +112,12 @@ lemma parametersToIsometry_injective (P : BPoly) : Function.Injective (parameter
       | inr v => exact (direct_ne_opposite (direct_coeff_ne_zero u.prop) he).elim
   | inr u =>
       cases v with
-      | inl v => exact (direct_ne_opposite (direct_coeff_ne_zero v.prop) (fun z => (he z).symm)).elim
+      | inl v =>
+        exact (direct_ne_opposite (direct_coeff_ne_zero v.prop) (fun z => (he z).symm)).elim
       | inr v => exact congrArg Sum.inr (Subtype.ext (opposite_parameters_unique he))
 
-lemma parametersToIsometry_surjective (P : BPoly) : Function.Surjective (parametersToIsometry P) := by
+lemma parametersToIsometry_surjective (P : BPoly) :
+    Function.Surjective (parametersToIsometry P) := by
   intro f
   rcases isometry_affine_forms f.val with ⟨a, b, ha, he⟩ | ⟨a, b, ha, he⟩
   · have hs : DirectSymmetry (realLocus P) a b := ⟨ha, by intro z; rw [← he]; exact f.prop z⟩
@@ -126,7 +133,9 @@ lemma parametersToIsometry_surjective (P : BPoly) : Function.Surjective (paramet
     intro z
     exact (he z).symm
 
-noncomputable def euclideanIsometryEquiv (P : BPoly) : EuclideanSymmetries P ≃ isometrySymmetryGroup P :=
+/-- Euclidean-symmetry parameters are equivalent to the isometries preserving the locus. -/
+noncomputable def euclideanIsometryEquiv (P : BPoly) :
+    EuclideanSymmetries P ≃ isometrySymmetryGroup P :=
   Equiv.ofBijective (parametersToIsometry P)
     ⟨parametersToIsometry_injective P, parametersToIsometry_surjective P⟩
 

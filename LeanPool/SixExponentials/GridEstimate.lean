@@ -5,8 +5,18 @@ Authors: Carlo Perassi
 -/
 module
 
-public import Mathlib
-public import LeanPool.SixExponentials.CauchyEstimate
+public import Mathlib.Analysis.CStarAlgebra.Classes
+public import Mathlib.Analysis.Calculus.IteratedDeriv.Defs
+public import Mathlib.Analysis.Complex.Exponential
+import LeanPool.SixExponentials.CauchyEstimate
+import Mathlib.Algebra.Order.Star.Real
+import Mathlib.AlgebraicTopology.FundamentalGroupoid.SimplyConnected
+import Mathlib.Analysis.Complex.CauchyIntegral
+import Mathlib.Analysis.Convex.Contractible
+import Mathlib.Order.CompletePartialOrder
+import Mathlib.RingTheory.WittVector.IsPoly
+import Mathlib.Tactic.Monotonicity.Lemmas
+import Mathlib.Tactic.ReduceModChar
 
 /-!
 # Exponential polynomials on a grid
@@ -58,7 +68,8 @@ theorem expPoly_grid_estimate {ι κ : Type*} [Fintype ι] (y : ι → ℂ)
     · simp
     intro a b hab
     have := hy.fintypeLinearCombination_injective (a₁ := fun j => (a j : ℚ))
-      (a₂ := fun j => (b j : ℚ)) (by simpa [Fintype.linearCombination_apply, Rat.smul_def] using hab)
+      (a₂ := fun j => (b j : ℚ))
+      (by simpa [Fintype.linearCombination_apply, Rat.smul_def] using hab)
     funext j; exact_mod_cast congrFun this j
   -- every point of the grid is within `ρ` of the target
   have hdist : ∀ m' : ι → ℕ, (∀ j, m' j < A j) →
@@ -88,13 +99,15 @@ theorem expPoly_grid_estimate {ι κ : Type*} [Fintype ι] (y : ι → ℂ)
     gcongr
     · exact (pow_le_pow_left₀ (norm_nonneg _) hzZ _).trans (pow_le_pow_right₀ hZ1 (he k hk))
     · exact (Complex.re_le_norm _).trans (by
-        rw [norm_mul]; exact mul_le_mul (hω k hk) hzZ (norm_nonneg _) ((norm_nonneg _).trans (hω k hk)))
+        rw [norm_mul]
+        exact mul_le_mul (hω k hk) hzZ (norm_nonneg _) ((norm_nonneg _).trans (hω k hk)))
   -- the target and the grid; every grid point is a zero of order at least `n`
   set w : ℂ := ∑ j, (m j : ℂ) * y j with hwdef
   set R : ℝ := (ρ + 1) * u with hR
   have hPw : ∀ z ∈ P, ‖z - w‖ ≤ ρ := fun z hz => by
     obtain ⟨m', hm', rfl⟩ := Finset.mem_image.1 hz
-    exact hdist m' fun j => ((by simpa using Fintype.mem_piFinset.1 hm' j) : m' j < t j).trans_le (htA j)
+    exact hdist m' fun j =>
+      ((by simpa using Fintype.mem_piFinset.1 hm' j) : m' j < t j).trans_le (htA j)
   have hM0 : 0 ≤ (∑ k ∈ s, ‖c k‖) * Z ^ E * Real.exp (W * Z) := by
     have : 0 ≤ Z ^ E := pow_nonneg (by linarith) _
     positivity
@@ -127,5 +140,3 @@ theorem expPoly_grid_estimate {ι κ : Type*} [Fintype ι] (y : ι → ℂ)
     _ ≤ _ := by gcongr
 
 end SixExponentials.Transcendence
-
-#min_imports

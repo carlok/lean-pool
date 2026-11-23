@@ -5,8 +5,11 @@ Authors: Carlo Perassi
 -/
 module
 
-public import Mathlib
-public import LeanPool.SixExponentials.NumberField
+public import Mathlib.Analysis.CStarAlgebra.Classes
+public import Mathlib.Analysis.Complex.Exponential
+public import Mathlib.RingTheory.Algebraic.Defs
+import LeanPool.SixExponentials.NumberField
+import Mathlib.FieldTheory.IntermediateField.Adjoin.Basic
 
 /-!
 # The six exponentials theorem
@@ -43,5 +46,3 @@ theorem six_exponentials (x : Fin 2 → ℂ) (y : Fin 3 → ℂ)
   exact hij (IntermediateField.subset_adjoin ℚ S ⟨(i, j), rfl⟩)
 
 end SixExponentials
-
-#min_imports

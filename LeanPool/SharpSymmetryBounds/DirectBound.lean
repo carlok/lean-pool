@@ -22,6 +22,7 @@ namespace CurveSymmetry
 abbrev DirectSymmetries (P : BPoly) :=
   {ab : ℂ × ℂ // DirectSymmetry (realLocus P) ab.1 ab.2}
 
+/-- Direct symmetries with common center `c` correspond to centered rotations of `shift c P`. -/
 noncomputable def directRotationEquiv (P : BPoly) (c : ℂ)
     (hcenter : ∀ a b : ℂ, DirectSymmetry (realLocus P) a b → b = (1 - a) * c) :
     DirectSymmetries P ≃ centeredRotationGroup (shift c P) where

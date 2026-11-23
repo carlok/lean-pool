@@ -5,10 +5,13 @@ Authors: Carlo Perassi
 -/
 module
 
-public import Mathlib
-public import LeanPool.SixExponentials.AuxiliaryFunction
-public import LeanPool.SixExponentials.DescentStep
-public import LeanPool.SixExponentials.CharacterIndependence
+public import Mathlib.Analysis.CStarAlgebra.Classes
+public import Mathlib.Analysis.Complex.Exponential
+public import Mathlib.FieldTheory.IntermediateField.Basic
+public import Mathlib.LinearAlgebra.FiniteDimensional.Defs
+import LeanPool.SixExponentials.AuxiliaryFunction
+import LeanPool.SixExponentials.CharacterIndependence
+import LeanPool.SixExponentials.DescentStep
 
 /-!
 # The six exponentials theorem relative to a number field
@@ -59,5 +62,3 @@ theorem six_exponentials_of_numberField
   exact hlam0 (SX.eq_zero_of_expSum_vanishes hl2 x y hx hy L p hall lam0 hlam0mem)
 
 end SixExponentials.SX
-
-#min_imports

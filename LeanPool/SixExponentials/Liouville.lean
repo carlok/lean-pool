@@ -5,7 +5,13 @@ Authors: Carlo Perassi
 -/
 module
 
-public import Mathlib
+public import Mathlib.NumberTheory.NumberField.House
+import Mathlib.Analysis.CStarAlgebra.Classes
+import Mathlib.RingTheory.Flat.TorsionFree
+import Mathlib.RingTheory.Henselian
+import Mathlib.RingTheory.RegularLocalRing.Defs
+import Mathlib.RingTheory.SimpleRing.Principal
+import Mathlib.Tactic.Monotonicity.Lemmas
 
 /-!
 # Liouville's inequality
@@ -51,5 +57,3 @@ theorem liouville_house {K : Type*} [Field K] [NumberField K] {α : K} (hα : α
         rw [mul_pow]; nth_rw 3 [show d = (d - 1) + 1 by omega]; ring
 
 end SixExponentials.Transcendence
-
-#min_imports

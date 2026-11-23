@@ -5,7 +5,15 @@ Authors: Carlo Perassi
 -/
 module
 
-public import Mathlib
+public import Mathlib.Algebra.BigOperators.Group.Finset.Defs
+public import Mathlib.Basic.Real.Basic
+public import Mathlib.Data.Fintype.Card
+public import Mathlib.LinearAlgebra.Matrix.Defs
+import Mathlib.Algebra.Order.Star.Real
+import Mathlib.NumberTheory.SiegelsLemma
+import Mathlib.Tactic.Basify
+import Mathlib.Tactic.ENatToNat
+import Mathlib.Tactic.Monotonicity.Lemmas
 
 /-!
 # Siegel's lemma, entrywise
@@ -24,8 +32,8 @@ namespace SixExponentials.Transcendence
 # Siegel's lemma with an entrywise bound
 
 Let `A` be an integer matrix with `m` rows, `n ≥ 2m` columns and entries of absolute value at most
-`B ≥ 1`. With no rows, a unit vector is a non-zero siegel_entrywise of `A t = 0`. Otherwise Siegel's lemma
-gives a non-zero integer siegel_entrywise with `|t_b| ≤ (n · max(1, ‖A‖))^(m / (n - m))`, where `‖A‖ ≤ B`
+`B ≥ 1`. With no rows, a unit vector is a non-zero solution of `A t = 0`. Otherwise Siegel's lemma
+gives a non-zero integer solution with `|t_b| ≤ (n · max(1, ‖A‖))^(m / (n - m))`, where `‖A‖ ≤ B`
 is the largest absolute value of an entry. The exponent `m / (n - m)` lies in `[0, 1]` and
 `n B ≥ 1`, so `|t_b| ≤ n B`.
 -/
@@ -58,7 +66,8 @@ theorem siegel_entrywise {α β : Type*} [Fintype α] [Fintype β] (A : Matrix �
     -- with at least twice as many unknowns as equations the Siegel exponent is at most one
     have he1 : ((Fintype.card α : ℕ) : ℝ) / ((Fintype.card β : ℕ) - (Fintype.card α : ℕ)) ≤ 1 := by
       rw [div_le_one (by linarith)]; linarith
-    have he0 : (0 : ℝ) ≤ ((Fintype.card α : ℕ) : ℝ) / ((Fintype.card β : ℕ) - (Fintype.card α : ℕ)) :=
+    have he0 :
+        (0 : ℝ) ≤ ((Fintype.card α : ℕ) : ℝ) / ((Fintype.card β : ℕ) - (Fintype.card α : ℕ)) :=
       div_nonneg hm.le (by linarith)
     have hbase : (1 : ℝ) ≤ Fintype.card β * B := by nlinarith
     calc |(t b : ℝ)| = ‖t b‖ := (Int.norm_eq_abs _).symm
@@ -71,5 +80,3 @@ theorem siegel_entrywise {α β : Type*} [Fintype α] [Fintype β] (A : Matrix �
       _ = Fintype.card β * B := Real.rpow_one _
 
 end SixExponentials.Transcendence
-
-#min_imports

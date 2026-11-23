@@ -20,20 +20,27 @@ namespace CurveSymmetry
 
 open MvPolynomial
 
+/-- The substitution `x = (X + Y)/2`, `y = -i (X - Y)/2` from Cartesian to complex coordinates. -/
 noncomputable def complexify : BPoly →+* BPoly :=
   eval₂Hom C (fun i : Fin 2 => if i = 0 then C (1 / 2 : ℂ) * (X 0 + X 1)
     else -C Complex.I * C (1 / 2 : ℂ) * (X 0 - X 1))
 
+/-- The substitution `X = x + i y`, `Y = x - i y` from complex to Cartesian coordinates. -/
 noncomputable def cartesianize : BPoly →+* BPoly :=
   eval₂Hom C (fun i : Fin 2 => if i = 0 then X 0 + C Complex.I * X 1
     else X 0 - C Complex.I * X 1)
 
 @[simp] lemma complexify_C (c : ℂ) : complexify (C c) = C c := by simp [complexify]
 @[simp] lemma cartesianize_C (c : ℂ) : cartesianize (C c) = C c := by simp [cartesianize]
-@[simp] lemma complexify_X_zero : complexify (X 0) = C (1 / 2 : ℂ) * (X 0 + X 1) := by simp [complexify]
-@[simp] lemma complexify_X_one : complexify (X 1) = -C Complex.I * C (1 / 2 : ℂ) * (X 0 - X 1) := by simp [complexify]
-@[simp] lemma cartesianize_X_zero : cartesianize (X 0) = X 0 + C Complex.I * X 1 := by simp [cartesianize]
-@[simp] lemma cartesianize_X_one : cartesianize (X 1) = X 0 - C Complex.I * X 1 := by simp [cartesianize]
+@[simp] lemma complexify_X_zero : complexify (X 0) = C (1 / 2 : ℂ) * (X 0 + X 1) := by
+  simp [complexify]
+@[simp] lemma complexify_X_one :
+    complexify (X 1) = -C Complex.I * C (1 / 2 : ℂ) * (X 0 - X 1) := by
+  simp [complexify]
+@[simp] lemma cartesianize_X_zero : cartesianize (X 0) = X 0 + C Complex.I * X 1 := by
+  simp [cartesianize]
+@[simp] lemma cartesianize_X_one : cartesianize (X 1) = X 0 - C Complex.I * X 1 := by
+  simp [cartesianize]
 
 lemma cartesianize_complexify (P : BPoly) : cartesianize (complexify P) = P := by
   have hI : (C Complex.I : BPoly) ^ 2 = -1 := by rw [← map_pow, Complex.I_sq]; simp
@@ -47,7 +54,8 @@ lemma cartesianize_complexify (P : BPoly) : cartesianize (complexify P) = P := b
       simp only [map_mul, hP]
       fin_cases i
       · change P * cartesianize (complexify (X 0)) = P * X 0
-        rw [complexify_X_zero, map_mul, cartesianize_C, map_add, cartesianize_X_zero, cartesianize_X_one]
+        rw [complexify_X_zero, map_mul, cartesianize_C, map_add, cartesianize_X_zero,
+          cartesianize_X_one]
         linear_combination P * (X 0 : BPoly) * hhalf
       · change P * cartesianize (complexify (X 1)) = P * X 1
         rw [complexify_X_one, map_mul, map_mul, map_neg, cartesianize_C, cartesianize_C,
@@ -67,7 +75,8 @@ lemma complexify_cartesianize (P : BPoly) : complexify (cartesianize P) = P := b
       simp only [map_mul, hP]
       fin_cases i
       · change P * complexify (cartesianize (X 0)) = P * X 0
-        rw [cartesianize_X_zero, map_add, map_mul, complexify_C, complexify_X_zero, complexify_X_one]
+        rw [cartesianize_X_zero, map_add, map_mul, complexify_C, complexify_X_zero,
+          complexify_X_one]
         linear_combination P * (X 0 : BPoly) * hhalf -
           P * C (1 / 2 : ℂ) * ((X 0 : BPoly) - X 1) * hI
       · change P * complexify (cartesianize (X 1)) = P * X 1
@@ -75,6 +84,7 @@ lemma complexify_cartesianize (P : BPoly) : complexify (cartesianize P) = P := b
         linear_combination P * (X 1 : BPoly) * hhalf +
           P * C (1 / 2 : ℂ) * ((X 0 : BPoly) - X 1) * hI
 
+/-- `complexify` as a ring isomorphism, with inverse `cartesianize`. -/
 noncomputable def complexifyEquiv : BPoly ≃+* BPoly :=
   { complexify with
     invFun := cartesianize
@@ -104,7 +114,8 @@ lemma complexify_degree_le (P : BPoly) : (complexify P).totalDegree ≤ P.totalD
   have hc0 := totalDegree_mul (C (1 / 2 : ℂ) : BPoly) (X 0 + X 1)
   have hc1 := totalDegree_mul (-C Complex.I * C (1 / 2 : ℂ) : BPoly) (X 0 - X 1)
   have hc2 := totalDegree_mul (-C Complex.I : BPoly) (C (1 / 2 : ℂ))
-  simp only [totalDegree_C, totalDegree_neg, totalDegree_X, zero_add, max_self] at hsum hsub hc0 hc1 hc2
+  simp only [totalDegree_C, totalDegree_neg, totalDegree_X, zero_add, max_self]
+    at hsum hsub hc0 hc1 hc2
   split_ifs <;> omega
 
 lemma cartesianize_degree_le (P : BPoly) : (cartesianize P).totalDegree ≤ P.totalDegree := by
@@ -136,12 +147,14 @@ lemma eval_complexify (P : BPoly) (z : ℂ) :
       · change eval (fun j : Fin 2 => if j = 0 then z else star z) (complexify (X 0)) =
           eval (fun j : Fin 2 => if j = 0 then (z.re : ℂ) else (z.im : ℂ)) (X 0)
         rw [complexify_X_zero]
-        simp only [map_mul, map_add, eval_C, eval_X, show (1 : Fin 2) ≠ 0 by decide, ↓reduceIte, hsum]
+        simp only [map_mul, map_add, eval_C, eval_X, show (1 : Fin 2) ≠ 0 by decide, ↓reduceIte,
+          hsum]
         ring
       · change eval (fun j : Fin 2 => if j = 0 then z else star z) (complexify (X 1)) =
           eval (fun j : Fin 2 => if j = 0 then (z.re : ℂ) else (z.im : ℂ)) (X 1)
         rw [complexify_X_one]
-        simp only [map_mul, map_sub, map_neg, eval_C, eval_X, show (1 : Fin 2) ≠ 0 by decide, ↓reduceIte, hsub]
+        simp only [map_mul, map_sub, map_neg, eval_C, eval_X, show (1 : Fin 2) ≠ 0 by decide,
+          ↓reduceIte, hsub]
         ring_nf
         rw [Complex.I_sq]
         ring

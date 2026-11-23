@@ -20,6 +20,7 @@ namespace CurveSymmetry
 
 open MvPolynomial
 
+/-- Translation of a plane polynomial by `c`, in complex coordinates: `z ↦ z + c`. -/
 noncomputable def shift (c : ℂ) : BPoly →+* BPoly :=
   eval₂Hom C (fun i : Fin 2 => X i + C (if i = 0 then c else star c))
 
@@ -34,6 +35,7 @@ lemma shift_comp (c d : ℂ) (P : BPoly) : shift c (shift d P) = shift (c + d) P
       simp only [map_mul, hP]
       fin_cases i <;> simp [shift, star_add, map_add, add_assoc]
 
+/-- `shift c` as a ring isomorphism, with inverse `shift (-c)`. -/
 noncomputable def shiftEquiv (c : ℂ) : BPoly ≃+* BPoly :=
   { shift c with
     invFun := shift (-c)
@@ -110,6 +112,7 @@ lemma realLocus_shift_infinite (c : ℂ) {P : BPoly} (hinf : (realLocus P).Infin
   rintro _ ⟨z, hz, rfl⟩
   simpa [mem_realLocus_shift] using hz
 
+/-- The real locus of `P` is not a circle of positive radius. -/
 def NotCircle (P : BPoly) : Prop :=
   ¬ ∃ c : ℂ, ∃ R : ℝ, 0 < R ∧ realLocus P = Metric.sphere c R
 

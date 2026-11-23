@@ -35,6 +35,7 @@ noncomputable def centeredRotationGroup (P : BPoly) : Subgroup ℂˣ where
     intro z
     simpa [← mul_assoc] using (hu.2 ((↑u⁻¹ : ℂ) * z)).symm
 
+/-- A centered rotation, viewed as its complex multiplier. -/
 noncomputable def rotationValue (P : BPoly) : centeredRotationGroup P →* ℂ :=
   (Units.coeHom ℂ).comp (centeredRotationGroup P).subtype
 

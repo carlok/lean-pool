@@ -20,6 +20,7 @@ namespace CurveSymmetry
 
 open MvPolynomial
 
+/-- The two-parameter family `X^m (a + b X Y) + Y^m (conj a + conj b X Y)` of the equality case. -/
 noncomputable def twoParameter (m : ℕ) (a b : ℂ) : BPoly :=
   X 0 ^ m * (C a + C b * X 0 * X 1) +
     X 1 ^ m * (C (star a) + C (star b) * X 0 * X 1)
