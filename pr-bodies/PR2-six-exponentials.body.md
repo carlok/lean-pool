@@ -2,7 +2,7 @@ Adds `LeanPool/SixExponentials`, a Mathlib proof of the six exponentials theorem
 
 **Main results**
 - `SixExponentials.SX.six_exponentials_of_numberField`: let `d + l < d l`, let `x₁, …, x_d` be linearly independent over `ℚ`, let `y₁, …, y_l` be linearly independent over `ℚ`, and let `K ⊆ ℂ` have finite degree over `ℚ`. Then some `exp(xᵢ yⱼ) ∉ K`.
-- `SixExponentials.exists_transcendental_exp`: under the same hypotheses on `x` and `y`, some `exp(xᵢ yⱼ)` is transcendental. This PR adds it as a corollary, by the same argument the library uses for the 2 × 3 case.
+- `SixExponentials.exists_transcendental_exp`: under the same hypotheses on `x` and `y`, some `exp(xᵢ yⱼ)` is transcendental. This PR adds it, and the library's 2 × 3 theorem `six_exponentials` is now its special case.
 - `SixExponentials.six_exponentials_theorem`: the classical case `d = 2`, `l = 3`, in the registered Palomar statement.
 
 **Proof.** Schneider's method relative to a number field `K`:
@@ -28,7 +28,8 @@ The two developments are independent: nothing here was taken from `telaviv/stron
 - Modules renamed to UpperCamelCase; `import Mathlib` replaced by each file's own imports, settled bottom-up with `#min_imports`.
 - For Mathlib v4.36 and its linters: `push_neg` → `push Not`, goal-changing `show` → `change`, two unused `simp` arguments dropped, one `positivity` after a non-terminal `simp` replaced by `nlinarith`, and the unused hypothesis `hx` of `SX.descent_step` removed (with its one call site).
 - Lines wrapped to 100 characters; two garbled words in docstrings (`solution`) restored.
-- New: `exists_transcendental_exp`, the Lang–Ramachandra theorem for every `(d, l)` with `d + l < d l`.
+- New: `exists_transcendental_exp`, the Lang–Ramachandra theorem for every `(d, l)` with `d + l < d l`, in `Main.lean`; `six_exponentials` is its case `d = 2`, `l = 3`, so the argument appears once.
+- Removed: the unused definition `SX.OrderAtMost`.
 
 **Checks run** on GitHub Actions with Lean v4.36.0 and Mathlib v4.36.0, using the pool's `[leanOptions]` (`warningAsError`, `weak.linter.mathlibStandardSet`):
 
