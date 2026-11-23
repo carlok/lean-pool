@@ -30,7 +30,7 @@ The two developments are independent: nothing here was taken from `telaviv/stron
 - Lines wrapped to 100 characters; two garbled words in docstrings (`solution`) restored.
 - New: `exists_transcendental_exp`, the Lang–Ramachandra theorem for every `(d, l)` with `d + l < d l`.
 
-**Checks run locally** with Lean v4.36.0 and Mathlib v4.36.0, using the pool's `[leanOptions]` (`warningAsError`, `weak.linter.mathlibStandardSet`):
+**Checks run** on GitHub Actions with Lean v4.36.0 and Mathlib v4.36.0, using the pool's `[leanOptions]` (`warningAsError`, `weak.linter.mathlibStandardSet`):
 
 - `lake build LeanPool.SixExponentials.Imports` with Lean v4.36.0, Mathlib v4.36.0 and the pool's `[leanOptions]` (`weak.linter.mathlibStandardSet`; the build reports no warnings, so it passes with `warningAsError`), with the `LeanPoolLinters` plugin loaded.
 - `scripts/ci/lint-project.lean` (Batteries' slow declaration linters) passes for every module of the project.
