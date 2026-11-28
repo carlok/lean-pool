@@ -1,0 +1,37 @@
+name: Scratch check of the four exponentials port
+
+on:
+  push:
+    branches: [ci-scratch-4exp]
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+      - name: Install elan
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh \
+            | sh -s -- -y --default-toolchain none
+      - name: Mathlib cache
+        run: ~/.elan/bin/lake exe cache get
+      - name: Imports index
+        continue-on-error: true
+        run: ~/.elan/bin/lake exe mk_all --check
+      - name: Pool linter plugin
+        run: ~/.elan/bin/lake build LeanPoolLinters:shared
+      - name: Build FourExponentials
+        continue-on-error: true
+        run: ~/.elan/bin/lake build LeanPool.FourExponentials.Imports 2>&1 | tee build-six.log
+      - name: Declaration linter
+        continue-on-error: true
+        run: |
+          mods=$(grep -o "LeanPool\.FourExponentials[A-Za-z0-9.]*" LeanPool/FourExponentials/Imports.lean | sort -u | tr '\n' ' ')
+          ~/.elan/bin/lake env lean --run scripts/ci/lint-project.lean $mods
+      - name: Text style
+        continue-on-error: true
+        run: ~/.elan/bin/lake exe lint-style LeanPool 2>&1 | grep -E 'FourExponentials' || true
