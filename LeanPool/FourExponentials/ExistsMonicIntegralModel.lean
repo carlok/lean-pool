@@ -34,7 +34,7 @@ proof accepted on Prove2Me as `Transcendence.exists_monic_integral_model`.
 
 namespace FourExponentials.Transcendence
 
-namespace S7W4_exists_monic_integral_model
+namespace ExistsMonicIntegralModel
 
 open Polynomial
 
@@ -101,9 +101,9 @@ lemma int_frac {ω : ℂ} (y : IntermediateField.adjoin ℚ ({ω} : Set ℂ)) :
       eq_intCast (Int.castRingHom ℂ)]
     field_simp
 
-end S7W4_exists_monic_integral_model
+end ExistsMonicIntegralModel
 
-open Polynomial S7W4_exists_monic_integral_model in
+open Polynomial ExistsMonicIntegralModel in
 /-- **A monic integral model.** Let $\omega\in\mathbb{C}$ be transcendental and let
 $\theta\in\mathbb{C}$ be algebraic over $\mathbb{Q}(\omega)$. There are $\omega_1\in\mathbb{C}$ and
 $Q\in\mathbb{Z}[X][Y]$, monic in $Y$ of degree $d\ge1$, with $Q(\omega,\omega_1)=0$ and minimal

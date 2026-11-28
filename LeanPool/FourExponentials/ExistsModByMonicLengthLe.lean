@@ -24,12 +24,12 @@ It is subadditive and submultiplicative.
 Let `Q` be monic in `Y` of degree `d ≥ 1`, and write `R_k = Yᵏ %ₘ Q`. Then `R_0 = 1` and
 `R_{k+1} = Y R_k - c_k Q`, where `c_k ∈ ℤ[X]` is the coefficient of `Y^(d-1)` in `R_k`: the
 right side is congruent to `Y^(k+1)` modulo `Q` and has `Y`-degree below `d`. Since `c_k` is a
-coefficient of `R_k`, `exists_modByMonic_length_le_len R_{k+1} ≤ exists_modByMonic_length_le_len R_k
-+ exists_modByMonic_length_le_len R_k · exists_modByMonic_length_le_len Q`, so
-`exists_modByMonic_length_le_len R_k ≤ (1 + exists_modByMonic_length_le_len Q)ᵏ`,
+coefficient of `R_k`, `existsModByMonicLengthLeLen R_{k+1} ≤ existsModByMonicLengthLeLen R_k
++ existsModByMonicLengthLeLen R_k · existsModByMonicLengthLeLen Q`, so
+`existsModByMonicLengthLeLen R_k ≤ (1 + existsModByMonicLengthLeLen Q)ᵏ`,
 and the `X`-degrees of the coefficients of `R_k` are at most `k D`, where `D` bounds the
 `X`-degrees of the coefficients of `Q`. Division by a monic polynomial is linear, so
-`P %ₘ Q = ∑ₖ Pₖ R_k`, and the bounds follow with `C = 1 + exists_modByMonic_length_le_len Q + D`.
+`P %ₘ Q = ∑ₖ Pₖ R_k`, and the bounds follow with `C = 1 + existsModByMonicLengthLeLen Q + D`.
 
 If `Q` is monic of degree `0`, then `Q = 1` and every remainder is `0`; if `Q` is not monic,
 then `P %ₘ Q = P`. In both cases `C = 1` works.
@@ -45,7 +45,7 @@ proof accepted on Prove2Me as `Transcendence.exists_modByMonic_length_le`.
 
 namespace FourExponentials.Transcendence
 
-namespace S7W3_exists_modByMonic_length_le
+namespace ExistsModByMonicLengthLe
 
 open Polynomial
 
@@ -54,23 +54,23 @@ noncomputable def len1 (p : Polynomial ℤ) : ℕ :=
   ∑ i ∈ p.support, (p.coeff i).natAbs
 
 /-- The length of a polynomial in `ℤ[X][Y]`: the sum of the lengths of its coefficients. -/
-noncomputable def exists_modByMonic_length_le_len (P : Polynomial (Polynomial ℤ)) : ℕ :=
+noncomputable def existsModByMonicLengthLeLen (P : Polynomial (Polynomial ℤ)) : ℕ :=
   ∑ k ∈ P.support, len1 (P.coeff k)
 
-theorem len_mul_le (P R : Polynomial (Polynomial ℤ)) : exists_modByMonic_length_le_len (P * R) ≤
-    exists_modByMonic_length_le_len P * exists_modByMonic_length_le_len R :=
+theorem len_mul_le (P R : Polynomial (Polynomial ℤ)) : existsModByMonicLengthLeLen (P * R) ≤
+    existsModByMonicLengthLeLen P * existsModByMonicLengthLeLen R :=
   Transcendence.length_mul_le P R
 
 theorem len_sum_le {ι : Type*} (s : Finset ι) (f : ι → Polynomial (Polynomial ℤ)) :
-    exists_modByMonic_length_le_len (∑ i ∈ s, f i) ≤ ∑ i ∈ s,
-        exists_modByMonic_length_le_len (f i) :=
+    existsModByMonicLengthLeLen (∑ i ∈ s, f i) ≤ ∑ i ∈ s,
+        existsModByMonicLengthLeLen (f i) :=
   Transcendence.length_sum_le s f
 
 theorem len1_zero : len1 0 = 0 := by
   simp only [len1, support_zero, Finset.sum_empty]
 
-theorem len_zero : exists_modByMonic_length_le_len 0 = 0 := by
-  simp only [exists_modByMonic_length_le_len, support_zero, Finset.sum_empty]
+theorem len_zero : existsModByMonicLengthLeLen 0 = 0 := by
+  simp only [existsModByMonicLengthLeLen, support_zero, Finset.sum_empty]
 
 theorem len1_eq_sum (p : Polynomial ℤ) {s : Finset ℕ} (hs : p.support ⊆ s) :
     len1 p = ∑ i ∈ s, (p.coeff i).natAbs := by
@@ -78,13 +78,13 @@ theorem len1_eq_sum (p : Polynomial ℤ) {s : Finset ℕ} (hs : p.support ⊆ s)
   rw [notMem_support_iff.mp hi, Int.natAbs_zero]
 
 theorem len_eq_sum (P : Polynomial (Polynomial ℤ)) {s : Finset ℕ} (hs : P.support ⊆ s) :
-    exists_modByMonic_length_le_len P = ∑ k ∈ s, len1 (P.coeff k) := by
+    existsModByMonicLengthLeLen P = ∑ k ∈ s, len1 (P.coeff k) := by
   refine Finset.sum_subset hs fun k _ hk => ?_
   rw [notMem_support_iff.mp hk, len1_zero]
 
 /-- A single coefficient is no longer than the whole polynomial. -/
 theorem len1_coeff_le (P : Polynomial (Polynomial ℤ)) (k : ℕ) : len1 (P.coeff k) ≤
-    exists_modByMonic_length_le_len P := by
+    existsModByMonicLengthLeLen P := by
   by_cases hk : k ∈ P.support
   · exact Finset.single_le_sum (f := fun j => len1 (P.coeff j)) (fun _ _ => Nat.zero_le _) hk
   · rw [notMem_support_iff.mp hk, len1_zero]
@@ -96,34 +96,34 @@ theorem len1_one : len1 1 = 1 := by
     exact support_C_subset 1
   rw [len1_eq_sum 1 hs, Finset.sum_singleton, AddMonoidAlgebra.coeff_one_zero, Int.natAbs_one]
 
-theorem len_C (p : Polynomial ℤ) : exists_modByMonic_length_le_len (C p) = len1 p := by
+theorem len_C (p : Polynomial ℤ) : existsModByMonicLengthLeLen (C p) = len1 p := by
   rw [len_eq_sum (C p) (support_C_subset p), Finset.sum_singleton, coeff_C_zero]
 
-theorem len_one : exists_modByMonic_length_le_len 1 = 1 := by
+theorem len_one : existsModByMonicLengthLeLen 1 = 1 := by
   rw [← C_1, len_C, len1_one]
 
-theorem len_X : exists_modByMonic_length_le_len (X : Polynomial (Polynomial ℤ)) = 1 := by
+theorem len_X : existsModByMonicLengthLeLen (X : Polynomial (Polynomial ℤ)) = 1 := by
   have hs : (X : Polynomial (Polynomial ℤ)).support ⊆ {1} := fun i hi => by
     rwa [support_X] at hi
   rw [len_eq_sum X hs, Finset.sum_singleton, coeff_X_one, len1_one]
 
-theorem len_add_le (A B : Polynomial (Polynomial ℤ)) : exists_modByMonic_length_le_len (A + B) ≤
-    exists_modByMonic_length_le_len A + exists_modByMonic_length_le_len B := by
+theorem len_add_le (A B : Polynomial (Polynomial ℤ)) : existsModByMonicLengthLeLen (A + B) ≤
+    existsModByMonicLengthLeLen A + existsModByMonicLengthLeLen B := by
   have h := len_sum_le Finset.univ (fun b : Bool => cond b A B)
   rw [Fintype.sum_bool, Fintype.sum_bool] at h
   exact h
 
-theorem len_neg (A : Polynomial (Polynomial ℤ)) : exists_modByMonic_length_le_len (-A) =
-    exists_modByMonic_length_le_len A := by
-  unfold exists_modByMonic_length_le_len len1
+theorem len_neg (A : Polynomial (Polynomial ℤ)) : existsModByMonicLengthLeLen (-A) =
+    existsModByMonicLengthLeLen A := by
+  unfold existsModByMonicLengthLeLen len1
   rw [support_neg]
   refine Finset.sum_congr rfl fun k _ => ?_
   rw [coeff_neg, support_neg]
   refine Finset.sum_congr rfl fun i _ => ?_
   rw [coeff_neg, Int.natAbs_neg]
 
-theorem len_sub_le (A B : Polynomial (Polynomial ℤ)) : exists_modByMonic_length_le_len (A - B) ≤
-    exists_modByMonic_length_le_len A + exists_modByMonic_length_le_len B := by
+theorem len_sub_le (A B : Polynomial (Polynomial ℤ)) : existsModByMonicLengthLeLen (A - B) ≤
+    existsModByMonicLengthLeLen A + existsModByMonicLengthLeLen B := by
   rw [sub_eq_add_neg, ← len_neg B]
   exact len_add_le A (-B)
 
@@ -195,13 +195,13 @@ theorem X_pow_succ_modByMonic {Q : Polynomial (Polynomial ℤ)} (hQ : Q.Monic)
     _ hQ ⟨?_, degree_lt_degree (by omega)⟩).2
   linear_combination X * hsplit
 
-/-- `exists_modByMonic_length_le_len (Yᵏ %ₘ Q) ≤ (1 + exists_modByMonic_length_le_len Q)ᵏ`, and the
+/-- `existsModByMonicLengthLeLen (Yᵏ %ₘ Q) ≤ (1 + existsModByMonicLengthLeLen Q)ᵏ`, and the
   coefficients of `Yᵏ %ₘ Q` have `X`-degree at
 most `k D`. -/
 theorem X_pow_modByMonic_le {Q : Polynomial (Polynomial ℤ)} (hQ : Q.Monic)
     (hd : 1 ≤ Q.natDegree) {D : ℕ} (hD : ∀ j, (Q.coeff j).natDegree ≤ D) :
-    ∀ k : ℕ, exists_modByMonic_length_le_len (X ^ k %ₘ Q) ≤ (1 +
-        exists_modByMonic_length_le_len Q) ^ k ∧
+    ∀ k : ℕ, existsModByMonicLengthLeLen (X ^ k %ₘ Q) ≤ (1 +
+        existsModByMonicLengthLeLen Q) ^ k ∧
       ∀ j, ((X ^ k %ₘ Q).coeff j).natDegree ≤ k * D
   | 0 => by
     have h1 : (X ^ 0 : Polynomial (Polynomial ℤ)) %ₘ Q = 1 := by
@@ -216,24 +216,24 @@ theorem X_pow_modByMonic_le {Q : Polynomial (Polynomial ℤ)} (hQ : Q.Monic)
     have hkD : (k + 1) * D = k * D + D := by ring
     rw [X_pow_succ_modByMonic hQ hd k]
     refine ⟨?_, ?_⟩
-    · calc exists_modByMonic_length_le_len (X * (X ^ k %ₘ Q) - C ((X ^ k %ₘ Q).coeff (Q.natDegree -
+    · calc existsModByMonicLengthLeLen (X * (X ^ k %ₘ Q) - C ((X ^ k %ₘ Q).coeff (Q.natDegree -
              1)) * Q)
-          ≤ exists_modByMonic_length_le_len (X * (X ^ k %ₘ Q)) +
-              exists_modByMonic_length_le_len (C ((X ^ k %ₘ Q).coeff (Q.natDegree - 1)) * Q) :=
+          ≤ existsModByMonicLengthLeLen (X * (X ^ k %ₘ Q)) +
+              existsModByMonicLengthLeLen (C ((X ^ k %ₘ Q).coeff (Q.natDegree - 1)) * Q) :=
             len_sub_le _ _
-        _ ≤ exists_modByMonic_length_le_len (X ^ k %ₘ Q) +
-            exists_modByMonic_length_le_len (X ^ k %ₘ Q) * exists_modByMonic_length_le_len Q := by
+        _ ≤ existsModByMonicLengthLeLen (X ^ k %ₘ Q) +
+            existsModByMonicLengthLeLen (X ^ k %ₘ Q) * existsModByMonicLengthLeLen Q := by
             refine Nat.add_le_add ?_ ?_
             · refine (len_mul_le _ _).trans (le_of_eq ?_)
               rw [len_X, Nat.one_mul]
             · refine (len_mul_le _ _).trans (Nat.mul_le_mul_right _ ?_)
               rw [len_C]
               exact len1_coeff_le _ _
-        _ = exists_modByMonic_length_le_len (X ^ k %ₘ Q) * (1 + exists_modByMonic_length_le_len Q)
+        _ = existsModByMonicLengthLeLen (X ^ k %ₘ Q) * (1 + existsModByMonicLengthLeLen Q)
             := by ring
-        _ ≤ (1 + exists_modByMonic_length_le_len Q) ^ k * (1 + exists_modByMonic_length_le_len Q) :=
+        _ ≤ (1 + existsModByMonicLengthLeLen Q) ^ k * (1 + existsModByMonicLengthLeLen Q) :=
             Nat.mul_le_mul_right _ ih1
-        _ = (1 + exists_modByMonic_length_le_len Q) ^ (k + 1) := (pow_succ _ _).symm
+        _ = (1 + existsModByMonicLengthLeLen Q) ^ (k + 1) := (pow_succ _ _).symm
     · refine degX_sub (fun i => (degX_mul degX_X ih2 i).trans ?_)
         (fun i => (degX_mul (fun i => (degX_C _ i).trans (ih2 _)) hD i).trans (le_of_eq hkD.symm))
       rw [Nat.zero_add, hkD]
@@ -249,23 +249,23 @@ theorem modByMonic_eq_sum (Q P : Polynomial (Polynomial ℤ)) :
   simp only [modByMonicHom_apply, ← smul_eq_C_mul, smul_modByMonic]
 
 theorem main_monic {Q : Polynomial (Polynomial ℤ)} (hQ : Q.Monic) (hd : 1 ≤ Q.natDegree)
-    (P : Polynomial (Polynomial ℤ)) (b e n : ℕ) (hb : exists_modByMonic_length_le_len P ≤ b)
+    (P : Polynomial (Polynomial ℤ)) (b e n : ℕ) (hb : existsModByMonicLengthLeLen P ≤ b)
     (he : ∀ k, (P.coeff k).natDegree ≤ e) (hn : P.natDegree ≤ n) :
-    exists_modByMonic_length_le_len (P %ₘ Q) ≤ (1 + exists_modByMonic_length_le_len Q + degXQ Q) ^ n
+    existsModByMonicLengthLeLen (P %ₘ Q) ≤ (1 + existsModByMonicLengthLeLen Q + degXQ Q) ^ n
         * b ∧
-      ∀ k, ((P %ₘ Q).coeff k).natDegree ≤ e + (1 + exists_modByMonic_length_le_len Q + degXQ Q) * n
+      ∀ k, ((P %ₘ Q).coeff k).natDegree ≤ e + (1 + existsModByMonicLengthLeLen Q + degXQ Q) * n
           := by
   have hR := X_pow_modByMonic_le hQ hd (natDegree_coeff_le_degXQ Q)
-  have hK : 1 ≤ 1 + exists_modByMonic_length_le_len Q + degXQ Q := by omega
+  have hK : 1 ≤ 1 + existsModByMonicLengthLeLen Q + degXQ Q := by omega
   rw [modByMonic_eq_sum Q P]
   refine ⟨?_, fun j => ?_⟩
-  · calc exists_modByMonic_length_le_len (∑ k ∈ Finset.range (P.natDegree + 1), C (P.coeff k) *
+  · calc existsModByMonicLengthLeLen (∑ k ∈ Finset.range (P.natDegree + 1), C (P.coeff k) *
            (X ^ k %ₘ Q))
-        ≤ ∑ k ∈ Finset.range (P.natDegree + 1), exists_modByMonic_length_le_len (C (P.coeff k) *
+        ≤ ∑ k ∈ Finset.range (P.natDegree + 1), existsModByMonicLengthLeLen (C (P.coeff k) *
             (X ^ k %ₘ Q)) :=
           len_sum_le _ _
       _ ≤ ∑ k ∈ Finset.range (P.natDegree + 1),
-            len1 (P.coeff k) * (1 + exists_modByMonic_length_le_len Q + degXQ Q) ^ n := by
+            len1 (P.coeff k) * (1 + existsModByMonicLengthLeLen Q + degXQ Q) ^ n := by
           refine Finset.sum_le_sum fun k hk => ?_
           have hkn : k ≤ n := by
             have := Finset.mem_range.mp hk
@@ -273,15 +273,15 @@ theorem main_monic {Q : Polynomial (Polynomial ℤ)} (hQ : Q.Monic) (hd : 1 ≤ 
           refine (len_mul_le _ _).trans ?_
           rw [len_C]
           refine Nat.mul_le_mul_left _ ((hR k).1.trans ?_)
-          calc (1 + exists_modByMonic_length_le_len Q) ^ k ≤ (1 + exists_modByMonic_length_le_len Q
+          calc (1 + existsModByMonicLengthLeLen Q) ^ k ≤ (1 + existsModByMonicLengthLeLen Q
                  + degXQ Q) ^ k :=
                 Nat.pow_le_pow_left (Nat.le_add_right _ _) k
-            _ ≤ (1 + exists_modByMonic_length_le_len Q + degXQ Q) ^ n := Nat.pow_le_pow_right hK hkn
-      _ = exists_modByMonic_length_le_len P * (1 + exists_modByMonic_length_le_len Q + degXQ Q) ^ n
+            _ ≤ (1 + existsModByMonicLengthLeLen Q + degXQ Q) ^ n := Nat.pow_le_pow_right hK hkn
+      _ = existsModByMonicLengthLeLen P * (1 + existsModByMonicLengthLeLen Q + degXQ Q) ^ n
           := by
           rw [← Finset.sum_mul, len_eq_sum P supp_subset_range_natDegree_succ]
-      _ ≤ b * (1 + exists_modByMonic_length_le_len Q + degXQ Q) ^ n := Nat.mul_le_mul_right _ hb
-      _ = (1 + exists_modByMonic_length_le_len Q + degXQ Q) ^ n * b := Nat.mul_comm _ _
+      _ ≤ b * (1 + existsModByMonicLengthLeLen Q + degXQ Q) ^ n := Nat.mul_le_mul_right _ hb
+      _ = (1 + existsModByMonicLengthLeLen Q + degXQ Q) ^ n * b := Nat.mul_comm _ _
   · rw [finsetSum_coeff]
     refine natDegree_sum_le_of_forall_le _ _ fun k hk => ?_
     have hkn : k ≤ n := by
@@ -289,14 +289,14 @@ theorem main_monic {Q : Polynomial (Polynomial ℤ)} (hQ : Q.Monic) (hd : 1 ≤ 
       omega
     rw [coeff_C_mul]
     refine natDegree_mul_le.trans (Nat.add_le_add (he k) (((hR k).2 j).trans ?_))
-    calc k * degXQ Q ≤ n * (1 + exists_modByMonic_length_le_len Q + degXQ Q) :=
+    calc k * degXQ Q ≤ n * (1 + existsModByMonicLengthLeLen Q + degXQ Q) :=
            Nat.mul_le_mul hkn (Nat.le_add_left _ _)
-      _ = (1 + exists_modByMonic_length_le_len Q + degXQ Q) * n := Nat.mul_comm _ _
+      _ = (1 + existsModByMonicLengthLeLen Q + degXQ Q) * n := Nat.mul_comm _ _
 
 theorem exists_modByMonic_length_le_main (Q : Polynomial (Polynomial ℤ)) :
     ∃ C : ℕ, ∀ (P : Polynomial (Polynomial ℤ)) (b e n : ℕ),
-      exists_modByMonic_length_le_len P ≤ b → (∀ k, (P.coeff k).natDegree ≤ e) → P.natDegree ≤ n →
-      exists_modByMonic_length_le_len (P %ₘ Q) ≤ C ^ n * b ∧ ∀ k,
+      existsModByMonicLengthLeLen P ≤ b → (∀ k, (P.coeff k).natDegree ≤ e) → P.natDegree ≤ n →
+      existsModByMonicLengthLeLen (P %ₘ Q) ≤ C ^ n * b ∧ ∀ k,
           ((P %ₘ Q).coeff k).natDegree ≤ e + C * n := by
   by_cases hQ : Q.Monic
   · by_cases hd : Q.natDegree = 0
@@ -305,13 +305,13 @@ theorem exists_modByMonic_length_le_main (Q : Polynomial (Polynomial ℤ)) :
       refine ⟨Nat.zero_le _, fun k => ?_⟩
       rw [coeff_zero, natDegree_zero]
       exact Nat.zero_le _
-    · exact ⟨1 + exists_modByMonic_length_le_len Q + degXQ Q, fun P b e n hb he hn =>
+    · exact ⟨1 + existsModByMonicLengthLeLen Q + degXQ Q, fun P b e n hb he hn =>
         main_monic hQ (by omega) P b e n hb he hn⟩
   · refine ⟨1, fun P b e n hb he _ => ?_⟩
     rw [modByMonic_eq_of_not_monic P hQ, Nat.one_pow, Nat.one_mul, Nat.one_mul]
     exact ⟨hb, fun k => (he k).trans (Nat.le_add_right _ _)⟩
 
-end S7W3_exists_modByMonic_length_le
+end ExistsModByMonicLengthLe
 
 /-- **Reduction modulo a polynomial.** Let $Q\in\mathbb{Z}[X][Y]$. There is $C\in\mathbb{N}$ such
 that for all $b,e,n\in\mathbb{N}$ and every $P\in\mathbb{Z}[X][Y]$ with $L(P)\le b$, every
@@ -327,6 +327,6 @@ theorem exists_modByMonic_length_le (Q : Polynomial (Polynomial ℤ)) :
       ∑ k ∈ (P.modByMonic Q).support, ∑ i ∈ ((P.modByMonic Q).coeff k).support,
           (((P.modByMonic Q).coeff k).coeff i).natAbs ≤ C ^ n * b ∧
         ∀ k, ((P.modByMonic Q).coeff k).natDegree ≤ e + C * n := by
-  exact S7W3_exists_modByMonic_length_le.exists_modByMonic_length_le_main Q
+  exact ExistsModByMonicLengthLe.exists_modByMonic_length_le_main Q
 
 end FourExponentials.Transcendence

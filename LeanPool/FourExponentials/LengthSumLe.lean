@@ -34,27 +34,27 @@ proof accepted on Prove2Me as `Transcendence.length_sum_le`.
 
 namespace FourExponentials.Transcendence
 
-namespace S7W3_length_sum_le
+namespace LengthSumLe
 
 open Polynomial
 
 variable {R : Type*} [Semiring R]
 
 /-- The sum of the sizes of the coefficients of `p`. -/
-def length_sum_le_lam (ν : R → ℕ) (p : R[X]) : ℕ :=
+def lengthSumLeLam (ν : R → ℕ) (p : R[X]) : ℕ :=
   ∑ n ∈ p.support, ν (p.coeff n)
 
-theorem length_sum_le_lam_zero (ν : R → ℕ) : length_sum_le_lam ν 0 = 0 := by
-  rw [length_sum_le_lam, support_zero, Finset.sum_empty]
+theorem length_sum_le_lam_zero (ν : R → ℕ) : lengthSumLeLam ν 0 = 0 := by
+  rw [lengthSumLeLam, support_zero, Finset.sum_empty]
 
 /-- The sum may run over any finset containing the support. -/
 theorem length_sum_le_lam_eq_sum (ν : R → ℕ) (hν : ν 0 =
     0) (p : R[X]) {s : Finset ℕ} (hs : p.support ⊆ s) :
-    length_sum_le_lam ν p = ∑ n ∈ s, ν (p.coeff n) :=
+    lengthSumLeLam ν p = ∑ n ∈ s, ν (p.coeff n) :=
   Finset.sum_subset hs fun n _ hn => by rw [notMem_support_iff.1 hn, hν]
 
 theorem length_sum_le_lam_add_le (ν : R → ℕ) (hν : ν 0 = 0) (hadd : ∀ a b, ν (a + b) ≤ ν a + ν b)
-    (p q : R[X]) : length_sum_le_lam ν (p + q) ≤ length_sum_le_lam ν p + length_sum_le_lam ν q := by
+    (p q : R[X]) : lengthSumLeLam ν (p + q) ≤ lengthSumLeLam ν p + lengthSumLeLam ν q := by
   classical
   rw [length_sum_le_lam_eq_sum ν hν (p + q) support_add,
       length_sum_le_lam_eq_sum ν hν p Finset.subset_union_left,
@@ -63,9 +63,9 @@ theorem length_sum_le_lam_add_le (ν : R → ℕ) (hν : ν 0 = 0) (hadd : ∀ a
     rw [coeff_add]
     exact hadd _ _
 
-end S7W3_length_sum_le
+end LengthSumLe
 
-open S7W3_length_sum_le in
+open LengthSumLe in
 /-- **Length of a sum.** For every finite family $(f_i)_{i\in s}$ in $\mathbb{Z}[X][Y]$,
 $$ L\Bigl(\sum_{i\in s}f_i\Bigr)\le\sum_{i\in s}L(f_i). $$ -/
 theorem length_sum_le {ι : Type*} (s : Finset ι) (f : ι → Polynomial (Polynomial ℤ)) :
@@ -73,9 +73,9 @@ theorem length_sum_le {ι : Type*} (s : Finset ι) (f : ι → Polynomial (Polyn
         (((∑ i ∈ s, f i).coeff k).coeff j).natAbs ≤
       ∑ i ∈ s, ∑ k ∈ (f i).support, ∑ j ∈ ((f i).coeff k).support,
         (((f i).coeff k).coeff j).natAbs := by
-  exact Finset.le_sum_of_subadditive (length_sum_le_lam (length_sum_le_lam Int.natAbs))
-      (length_sum_le_lam_zero (length_sum_le_lam Int.natAbs)).le
-    (length_sum_le_lam_add_le (length_sum_le_lam Int.natAbs) (length_sum_le_lam_zero Int.natAbs)
+  exact Finset.le_sum_of_subadditive (lengthSumLeLam (lengthSumLeLam Int.natAbs))
+      (length_sum_le_lam_zero (lengthSumLeLam Int.natAbs)).le
+    (length_sum_le_lam_add_le (lengthSumLeLam Int.natAbs) (length_sum_le_lam_zero Int.natAbs)
       (length_sum_le_lam_add_le Int.natAbs Int.natAbs_zero Int.natAbs_add_le)) s f
 
 end FourExponentials.Transcendence

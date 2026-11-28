@@ -46,7 +46,7 @@ namespace FourExponentials
 
 open Filter Topology
 
-namespace W5_construction_growth
+namespace ConstructionGrowth
 
 /-- The growing majorant of the construction. -/
 noncomputable def A (x : ℝ) : ℝ :=
@@ -177,9 +177,9 @@ lemma B_step (x : ℝ) (hx : 0 < x) : B (x + 1) ≤ 3 * B x := by
       _ ≤ 3 * x ^ 2 / Real.sqrt (Real.log x) := by gcongr
       _ = 3 * (x ^ 2 / Real.sqrt (Real.log x)) := by ring
 
-end W5_construction_growth
+end ConstructionGrowth
 
-open W5_construction_growth in
+open ConstructionGrowth in
 /-- **The growth functions.** For every $k>0$ the growth functions $\sigma_1,\sigma_2$ are strictly
 increasing and tend to $+\infty$, and for every $x>0$
 $$ \sigma_2(x) \le\sigma_1(x), \qquad\sigma_i(x+1) \le3\,\sigma_i(x)\quad(i =1,2). $$ -/

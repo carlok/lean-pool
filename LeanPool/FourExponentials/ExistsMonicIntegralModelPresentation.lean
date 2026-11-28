@@ -32,7 +32,7 @@ proof accepted on Prove2Me as `Transcendence.exists_monic_integral_model_present
 
 namespace FourExponentials.Transcendence
 
-namespace S7W4_exists_monic_integral_model_presentation
+namespace ExistsMonicIntegralModelPresentation
 
 open Polynomial
 
@@ -150,9 +150,9 @@ lemma exists_primitive (F : IntermediateField ℚ ℂ) (S : Finset ℂ) (hS : �
   have := congrArg E.val hp
   simpa [Polynomial.aeval_algHom_apply] using this
 
-end S7W4_exists_monic_integral_model_presentation
+end ExistsMonicIntegralModelPresentation
 
-open Polynomial S7W4_exists_monic_integral_model_presentation in
+open Polynomial ExistsMonicIntegralModelPresentation in
 /-- **One model for finitely many numbers.** Let $\omega\in\mathbb{C}$ be transcendental and let
 $(z_i)_{i\in I}$ be a finite family of complex numbers algebraic over $\mathbb{Q}(\omega)$. There
 are $\omega_1\in\mathbb{C}$ and $Q\in\mathbb{Z}[X][Y]$, monic in $Y$ of degree $d\ge1$, with

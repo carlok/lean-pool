@@ -40,41 +40,41 @@ proof accepted on Prove2Me as `FourExp.exists_iteratedDeriv_presentation_column`
 
 namespace FourExponentials
 
-namespace T2_exists_iteratedDeriv_presentation_column
+namespace ExistsIteratedDerivPresentationColumn
 
 open Polynomial
 
 /-! ### Length and size of integer polynomials in two variables -/
 
 /-- The length of `P ∈ ℤ[X][Y]`: the sum of the absolute values of all its integer coefficients. -/
-noncomputable def exists_iteratedDeriv_presentation_column_len (P : ℤ[X][X]) : ℕ :=
+noncomputable def existsIteratedDerivPresentationColumnLen (P : ℤ[X][X]) : ℕ :=
   ∑ r ∈ P.support, ∑ h ∈ (P.coeff r).support, ((P.coeff r).coeff h).natAbs
 
 lemma exists_iteratedDeriv_presentation_column_len_CC (z : ℤ) :
-    exists_iteratedDeriv_presentation_column_len (C (C z)) = z.natAbs := by
+    existsIteratedDerivPresentationColumnLen (C (C z)) = z.natAbs := by
   rcases eq_or_ne z 0 with rfl | hz
-  · rw [Polynomial.C_0, Polynomial.C_0, exists_iteratedDeriv_presentation_column_len,
+  · rw [Polynomial.C_0, Polynomial.C_0, existsIteratedDerivPresentationColumnLen,
       Polynomial.support_zero, Finset.sum_empty,
       Int.natAbs_zero]
-  · rw [exists_iteratedDeriv_presentation_column_len,
+  · rw [existsIteratedDerivPresentationColumnLen,
       Polynomial.support_C (Polynomial.C_ne_zero.2 hz), Finset.sum_singleton,
       Polynomial.coeff_C_zero, Polynomial.support_C hz, Finset.sum_singleton,
       Polynomial.coeff_C_zero]
 
 /-- `P` has length at most `b`, and degrees at most `d` in `X` and in `Y`. -/
-def exists_iteratedDeriv_presentation_column_Sz (P : ℤ[X][X]) (b d : ℕ) : Prop :=
-  exists_iteratedDeriv_presentation_column_len P ≤ b ∧ (∀ r,
+def existsIteratedDerivPresentationColumnSz (P : ℤ[X][X]) (b d : ℕ) : Prop :=
+  existsIteratedDerivPresentationColumnLen P ≤ b ∧ (∀ r,
       (P.coeff r).natDegree ≤ d) ∧ P.natDegree ≤ d
 
 lemma exists_iteratedDeriv_presentation_column_sz_mono {P : ℤ[X][X]} {b b' d d' : ℕ} (h :
-    exists_iteratedDeriv_presentation_column_Sz P b d) (hb : b ≤ b') (hd : d ≤ d') :
-    exists_iteratedDeriv_presentation_column_Sz P b' d' :=
+    existsIteratedDerivPresentationColumnSz P b d) (hb : b ≤ b') (hd : d ≤ d') :
+    existsIteratedDerivPresentationColumnSz P b' d' :=
   ⟨h.1.trans hb, fun r => (h.2.1 r).trans hd, h.2.2.trans hd⟩
 
 lemma exists_iteratedDeriv_presentation_column_sz_mul {P Q : ℤ[X][X]} {b₁ b₂ d₁ d₂ : ℕ} (hP :
-    exists_iteratedDeriv_presentation_column_Sz P b₁ d₁) (hQ :
-        exists_iteratedDeriv_presentation_column_Sz Q b₂ d₂) :
-    exists_iteratedDeriv_presentation_column_Sz (P * Q) (b₁ * b₂) (d₁ + d₂) := by
+    existsIteratedDerivPresentationColumnSz P b₁ d₁) (hQ :
+        existsIteratedDerivPresentationColumnSz Q b₂ d₂) :
+    existsIteratedDerivPresentationColumnSz (P * Q) (b₁ * b₂) (d₁ + d₂) := by
   refine ⟨(Transcendence.length_mul_le P Q).trans (Nat.mul_le_mul hP.1 hQ.1), fun r => ?_,
     Polynomial.natDegree_mul_le.trans (Nat.add_le_add hP.2.2 hQ.2.2)⟩
   rw [Polynomial.coeff_mul]
@@ -83,8 +83,8 @@ lemma exists_iteratedDeriv_presentation_column_sz_mul {P Q : ℤ[X][X]} {b₁ b�
 
 lemma exists_iteratedDeriv_presentation_column_sz_sum {ι : Type*} (s : Finset ι) (f : ι →
     ℤ[X][X]) {b d : ℕ}
-    (h : ∀ i ∈ s, exists_iteratedDeriv_presentation_column_Sz (f i) b d) :
-        exists_iteratedDeriv_presentation_column_Sz (∑ i ∈ s, f i) (s.card * b) d := by
+    (h : ∀ i ∈ s, existsIteratedDerivPresentationColumnSz (f i) b d) :
+        existsIteratedDerivPresentationColumnSz (∑ i ∈ s, f i) (s.card * b) d := by
   refine ⟨(Transcendence.length_sum_le s f).trans ?_, fun r => ?_,
     Polynomial.natDegree_sum_le_of_forall_le _ _ fun i hi => (h i hi).2.2⟩
   · rw [← smul_eq_mul, ← Finset.sum_const]
@@ -93,7 +93,7 @@ lemma exists_iteratedDeriv_presentation_column_sz_sum {ι : Type*} (s : Finset �
     exact Polynomial.natDegree_sum_le_of_forall_le _ _ fun i hi => (h i hi).2.1 r
 
 lemma exists_iteratedDeriv_presentation_column_sz_CC (z : ℤ) :
-    exists_iteratedDeriv_presentation_column_Sz (C (C z)) z.natAbs 0 := by
+    existsIteratedDerivPresentationColumnSz (C (C z)) z.natAbs 0 := by
   refine ⟨(exists_iteratedDeriv_presentation_column_len_CC z).le, fun r => ?_,
       (Polynomial.natDegree_C _).le⟩
   rw [Polynomial.coeff_C]
@@ -101,15 +101,15 @@ lemma exists_iteratedDeriv_presentation_column_sz_CC (z : ℤ) :
   · exact (Polynomial.natDegree_C z).le
   · exact Polynomial.natDegree_zero.le
 
-lemma exists_iteratedDeriv_presentation_column_sz_one : exists_iteratedDeriv_presentation_column_Sz
+lemma exists_iteratedDeriv_presentation_column_sz_one : existsIteratedDerivPresentationColumnSz
     1 1 0 := by
   have h := exists_iteratedDeriv_presentation_column_sz_CC 1
   rw [Polynomial.C_1, Polynomial.C_1] at h
   exact h
 
 lemma exists_iteratedDeriv_presentation_column_sz_pow {P : ℤ[X][X]} {b d : ℕ} (h :
-    exists_iteratedDeriv_presentation_column_Sz P b d) : ∀ n : ℕ,
-        exists_iteratedDeriv_presentation_column_Sz (P ^ n) (b ^ n) (n * d)
+    existsIteratedDerivPresentationColumnSz P b d) : ∀ n : ℕ,
+        existsIteratedDerivPresentationColumnSz (P ^ n) (b ^ n) (n * d)
   | 0 => by
     rw [pow_zero, pow_zero, Nat.zero_mul]
     exact exists_iteratedDeriv_presentation_column_sz_one
@@ -119,8 +119,8 @@ lemma exists_iteratedDeriv_presentation_column_sz_pow {P : ℤ[X][X]} {b d : ℕ
         (exists_iteratedDeriv_presentation_column_sz_pow h n) h
 
 lemma exists_iteratedDeriv_presentation_column_sz_exists (P : ℤ[X][X]) : ∃ c,
-    exists_iteratedDeriv_presentation_column_Sz P c c := by
-  refine ⟨exists_iteratedDeriv_presentation_column_len P + (∑ k ∈ Finset.range (P.natDegree + 1),
+    existsIteratedDerivPresentationColumnSz P c c := by
+  refine ⟨existsIteratedDerivPresentationColumnLen P + (∑ k ∈ Finset.range (P.natDegree + 1),
       (P.coeff k).natDegree) + P.natDegree,
     by omega, fun r => ?_, by omega⟩
   by_cases hr : r ≤ P.natDegree
@@ -132,7 +132,7 @@ lemma exists_iteratedDeriv_presentation_column_sz_exists (P : ℤ[X][X]) : ∃ c
     exact Nat.zero_le _
 
 lemma exists_iteratedDeriv_presentation_column_sz_exists_fam {ι : Type*} [Finite ι] (F : ι →
-    ℤ[X][X]) : ∃ c, ∀ i, exists_iteratedDeriv_presentation_column_Sz (F i) c c := by
+    ℤ[X][X]) : ∃ c, ∀ i, existsIteratedDerivPresentationColumnSz (F i) c c := by
   have := Fintype.ofFinite ι
   choose c hc using fun i => exists_iteratedDeriv_presentation_column_sz_exists (F i)
   have hle : ∀ i, c i ≤ ∑ i', c i' := fun i =>
@@ -151,16 +151,16 @@ lemma exists_iteratedDeriv_presentation_column_phi_CC (φ : ℤ[X][X] →+* ℂ)
 
 /-- With `r` the coordinates of `Lⁿ αⁿ` in the basis `1, α, …, α^(ℓ-1)` and `φ(H) = α φ(D)`, this
 integer polynomial takes the value `φ(D)^(ℓ-1) Lⁿ αⁿ`. -/
-noncomputable def exists_iteratedDeriv_presentation_column_expPres (ℓ : ℕ) (r : ℕ →
+noncomputable def existsIteratedDerivPresentationColumnExpPres (ℓ : ℕ) (r : ℕ →
     ℤ) (Hp Dp : ℤ[X][X]) : ℤ[X][X] :=
   ∑ t ∈ Finset.range ℓ, C (C (r t)) * Hp ^ t * Dp ^ (ℓ - 1 - t)
 
 lemma exists_iteratedDeriv_presentation_column_expPres_eval (φ : ℤ[X][X] →+* ℂ) (ℓ : ℕ) (r : ℕ →
     ℤ) (Hp Dp : ℤ[X][X]) {α : ℂ}
     (hH : α * φ Dp = φ Hp) :
-    φ (exists_iteratedDeriv_presentation_column_expPres ℓ r Hp Dp) = φ Dp ^ (ℓ - 1) *
+    φ (existsIteratedDerivPresentationColumnExpPres ℓ r Hp Dp) = φ Dp ^ (ℓ - 1) *
         ∑ t ∈ Finset.range ℓ, (r t : ℂ) * α ^ t := by
-  rw [exists_iteratedDeriv_presentation_column_expPres, map_sum φ, Finset.mul_sum]
+  rw [existsIteratedDerivPresentationColumnExpPres, map_sum φ, Finset.mul_sum]
   refine Finset.sum_congr rfl fun t ht => ?_
   have ht' := Finset.mem_range.1 ht
   have hsplit : φ Dp ^ (ℓ - 1) = φ Dp ^ t * φ Dp ^ (ℓ - 1 - t) := by
@@ -172,12 +172,12 @@ lemma exists_iteratedDeriv_presentation_column_expPres_eval (φ : ℤ[X][X] →+
   ring
 
 lemma exists_iteratedDeriv_presentation_column_sz_expPres (ℓ : ℕ) (r : ℕ →
-    ℤ) {Hp Dp : ℤ[X][X]} {c R : ℕ} (hH : exists_iteratedDeriv_presentation_column_Sz Hp c c)
-    (hD : exists_iteratedDeriv_presentation_column_Sz Dp c c) (hr : ∀ t, (r t).natAbs ≤ R) :
-    exists_iteratedDeriv_presentation_column_Sz (exists_iteratedDeriv_presentation_column_expPres ℓ
+    ℤ) {Hp Dp : ℤ[X][X]} {c R : ℕ} (hH : existsIteratedDerivPresentationColumnSz Hp c c)
+    (hD : existsIteratedDerivPresentationColumnSz Dp c c) (hr : ∀ t, (r t).natAbs ≤ R) :
+    existsIteratedDerivPresentationColumnSz (existsIteratedDerivPresentationColumnExpPres ℓ
         r Hp Dp) (ℓ * (R * c ^ (ℓ - 1))) ((ℓ - 1) * c) := by
-  have h : exists_iteratedDeriv_presentation_column_Sz
-      (exists_iteratedDeriv_presentation_column_expPres ℓ r Hp Dp) ((Finset.range ℓ).card * (R *
+  have h : existsIteratedDerivPresentationColumnSz
+      (existsIteratedDerivPresentationColumnExpPres ℓ r Hp Dp) ((Finset.range ℓ).card * (R *
           c ^ (ℓ - 1))) ((ℓ - 1) * c) :=
     exists_iteratedDeriv_presentation_column_sz_sum (Finset.range ℓ) _ fun t ht => by
       have ht' := Finset.mem_range.1 ht
@@ -195,18 +195,18 @@ lemma exists_iteratedDeriv_presentation_column_sz_expPres (ℓ : ℕ) (r : ℕ �
   exact h
 
 /-- `φ(D)^(ℓ-1) L^N αⁿ` as an integer polynomial, for `n ≤ N`. -/
-noncomputable def exists_iteratedDeriv_presentation_column_fac (ℓ : ℕ) (r : ℕ → ℕ →
+noncomputable def existsIteratedDerivPresentationColumnFac (ℓ : ℕ) (r : ℕ → ℕ →
     ℤ) (Lc : ℤ) (Hp Dp : ℤ[X][X]) (N n : ℕ) : ℤ[X][X] :=
-  C (C (Lc ^ (N - n))) * exists_iteratedDeriv_presentation_column_expPres ℓ (r n) Hp Dp
+  C (C (Lc ^ (N - n))) * existsIteratedDerivPresentationColumnExpPres ℓ (r n) Hp Dp
 
 lemma exists_iteratedDeriv_presentation_column_fac_eval (φ : ℤ[X][X] →+* ℂ) (ℓ : ℕ) (r : ℕ → ℕ →
     ℤ) (Lc : ℤ) (Hp Dp : ℤ[X][X]) {α : ℂ}
     (hH : α * φ Dp = φ Hp)
     (hr : ∀ n, (Lc : ℂ) ^ n * α ^ n = ∑ t ∈ Finset.range ℓ, (r n t : ℂ) * α ^ t)
     {N n : ℕ} (hn : n ≤ N) :
-    φ (exists_iteratedDeriv_presentation_column_fac ℓ r Lc Hp Dp N n) = φ Dp ^ (ℓ - 1) *
+    φ (existsIteratedDerivPresentationColumnFac ℓ r Lc Hp Dp N n) = φ Dp ^ (ℓ - 1) *
         (Lc : ℂ) ^ N * α ^ n := by
-  rw [exists_iteratedDeriv_presentation_column_fac, map_mul φ,
+  rw [existsIteratedDerivPresentationColumnFac, map_mul φ,
       exists_iteratedDeriv_presentation_column_phi_CC φ,
           exists_iteratedDeriv_presentation_column_expPres_eval φ ℓ (r n) Hp Dp hH, ← hr n,
               Int.cast_pow]
@@ -217,11 +217,11 @@ lemma exists_iteratedDeriv_presentation_column_fac_eval (φ : ℤ[X][X] →+* �
 
 lemma exists_iteratedDeriv_presentation_column_sz_fac (ℓ : ℕ) (r : ℕ → ℕ →
     ℤ) (Lc : ℤ) {Hp Dp : ℤ[X][X]} {c A W : ℕ}
-    (hH : exists_iteratedDeriv_presentation_column_Sz Hp c c) (hD :
-        exists_iteratedDeriv_presentation_column_Sz Dp c c) (hr : ∀ n t, (r n t).natAbs ≤ A ^ n)
+    (hH : existsIteratedDerivPresentationColumnSz Hp c c) (hD :
+        existsIteratedDerivPresentationColumnSz Dp c c) (hr : ∀ n t, (r n t).natAbs ≤ A ^ n)
     (hW : ℓ * c ^ (ℓ - 1) ≤ W ∧ (ℓ - 1) * c ≤ W ∧ Lc.natAbs ≤ W ∧ A ≤ W) {N n : ℕ}
-    (hn : n ≤ N) : exists_iteratedDeriv_presentation_column_Sz
-        (exists_iteratedDeriv_presentation_column_fac ℓ r Lc Hp Dp N n) (W ^ (N + 1)) W := by
+    (hn : n ≤ N) : existsIteratedDerivPresentationColumnSz
+        (existsIteratedDerivPresentationColumnFac ℓ r Lc Hp Dp N n) (W ^ (N + 1)) W := by
   refine exists_iteratedDeriv_presentation_column_sz_mono
       (exists_iteratedDeriv_presentation_column_sz_mul
           (exists_iteratedDeriv_presentation_column_sz_CC _)
@@ -248,9 +248,9 @@ lemma colfac_eval (φ : ℤ[X][X] →+* ℂ) {Hp Dp : ℤ[X][X]} {α : ℂ} (hH 
   rw [colfac, map_mul φ, map_pow φ, map_pow φ, ← hH, mul_pow, hsplit]
   ring
 
-lemma sz_colfac {Hp Dp : ℤ[X][X]} {c : ℕ} (hH : exists_iteratedDeriv_presentation_column_Sz Hp c c)
-    (hD : exists_iteratedDeriv_presentation_column_Sz Dp c c) {N n : ℕ}
-    (hn : n ≤ N) : exists_iteratedDeriv_presentation_column_Sz (colfac Hp Dp N n) (c ^ N) (N * c) :=
+lemma sz_colfac {Hp Dp : ℤ[X][X]} {c : ℕ} (hH : existsIteratedDerivPresentationColumnSz Hp c c)
+    (hD : existsIteratedDerivPresentationColumnSz Dp c c) {N n : ℕ}
+    (hn : n ≤ N) : existsIteratedDerivPresentationColumnSz (colfac Hp Dp N n) (c ^ N) (N * c) :=
         by
   refine exists_iteratedDeriv_presentation_column_sz_mono
       (exists_iteratedDeriv_presentation_column_sz_mul
@@ -262,16 +262,16 @@ lemma sz_colfac {Hp Dp : ℤ[X][X]} {c : ℕ} (hH : exists_iteratedDeriv_present
 /-! ### The exponential factor -/
 
 /-- The product of the four factors, presenting `Λ₁ e^((j x₁ + k x₂)(a y₁ + b y₂))`. -/
-noncomputable def exists_iteratedDeriv_presentation_column_epart (ℓ : Fin 2 → ℕ) (r : Fin 2 → ℕ → ℕ
+noncomputable def existsIteratedDerivPresentationColumnEpart (ℓ : Fin 2 → ℕ) (r : Fin 2 → ℕ → ℕ
     → ℤ) (L : Fin 2 → ℤ)
     (H : Fin 2 → Fin 2 → ℤ[X][X]) (Dp : ℤ[X][X]) (Na N a b j k : ℕ) : ℤ[X][X] :=
-  colfac (H 0 0) Dp Na (j * a) * exists_iteratedDeriv_presentation_column_fac (ℓ 0) (r 0) (L 0) (H 0
+  colfac (H 0 0) Dp Na (j * a) * existsIteratedDerivPresentationColumnFac (ℓ 0) (r 0) (L 0) (H 0
       1) Dp N (j * b) *
-    colfac (H 1 0) Dp Na (k * a) * exists_iteratedDeriv_presentation_column_fac (ℓ 1) (r 1) (L 1) (H
+    colfac (H 1 0) Dp Na (k * a) * existsIteratedDerivPresentationColumnFac (ℓ 1) (r 1) (L 1) (H
         1 1) Dp N (k * b)
 
 /-- The constant `Λ₁ = δ^(T a) δ^(ℓ₀-1) L₀^N δ^(T a) δ^(ℓ₁-1) L₁^N`. -/
-noncomputable def exists_iteratedDeriv_presentation_column_lam (δ : ℂ) (ℓ : Fin 2 → ℕ) (L : Fin 2 →
+noncomputable def existsIteratedDerivPresentationColumnLam (δ : ℂ) (ℓ : Fin 2 → ℕ) (L : Fin 2 →
     ℤ) (Na N : ℕ) : ℂ :=
   δ ^ Na * (δ ^ (ℓ 0 - 1) * (L 0 : ℂ) ^ N) * δ ^ Na * (δ ^ (ℓ 1 - 1) * (L 1 : ℂ) ^ N)
 
@@ -296,31 +296,31 @@ lemma exists_iteratedDeriv_presentation_column_epart_eval (φ : ℤ[X][X] →+* 
     (hr : ∀ p n, (L p : ℂ) ^ n * Complex.exp (![x₁, x₂] p * ![y₁, y₂] 1) ^ n =
       ∑ t ∈ Finset.range (ℓ p), (r p n t : ℂ) * Complex.exp (![x₁, x₂] p * ![y₁, y₂] 1) ^ t)
     {Na N a b j k : ℕ} (h1 : j * a ≤ Na) (h2 : j * b ≤ N) (h3 : k * a ≤ Na) (h4 : k * b ≤ N) :
-    φ (exists_iteratedDeriv_presentation_column_epart ℓ r L H Dp Na N a b j k) =
-        exists_iteratedDeriv_presentation_column_lam (φ Dp) ℓ L Na N *
+    φ (existsIteratedDerivPresentationColumnEpart ℓ r L H Dp Na N a b j k) =
+        existsIteratedDerivPresentationColumnLam (φ Dp) ℓ L Na N *
       Complex.exp (((j : ℂ) * x₁ + (k : ℂ) * x₂) * ((a : ℂ) * y₁ + (b : ℂ) * y₂)) := by
-  rw [exists_iteratedDeriv_presentation_column_epart, map_mul φ, map_mul φ, map_mul φ,
+  rw [existsIteratedDerivPresentationColumnEpart, map_mul φ, map_mul φ, map_mul φ,
       colfac_eval φ (hH 0 0) h1,
     exists_iteratedDeriv_presentation_column_fac_eval φ _ _ _ _ _ (hH 0 1) (hr 0) h2,
         colfac_eval φ (hH 1 0) h3,
     exists_iteratedDeriv_presentation_column_fac_eval φ _ _ _ _ _ (hH 1 1) (hr 1) h4,
         exists_iteratedDeriv_presentation_column_exp_split x₁ x₂ y₁ y₂ a b j k,
-            exists_iteratedDeriv_presentation_column_lam]
+            existsIteratedDerivPresentationColumnLam]
   ring
 
 lemma exists_iteratedDeriv_presentation_column_sz_epart (ℓ : Fin 2 → ℕ) (r : Fin 2 → ℕ → ℕ →
     ℤ) (L : Fin 2 → ℤ) (A : Fin 2 → ℕ)
     {H : Fin 2 → Fin 2 → ℤ[X][X]} {Dp : ℤ[X][X]} {c W : ℕ}
-    (hH : ∀ p q, exists_iteratedDeriv_presentation_column_Sz (H p q) c c) (hD :
-        exists_iteratedDeriv_presentation_column_Sz Dp c c) (hr : ∀ p n t, (r p n t).natAbs ≤
+    (hH : ∀ p q, existsIteratedDerivPresentationColumnSz (H p q) c c) (hD :
+        existsIteratedDerivPresentationColumnSz Dp c c) (hr : ∀ p n t, (r p n t).natAbs ≤
             A p ^ n)
     (hW : ∀ p, ℓ p * c ^ (ℓ p - 1) ≤ W ∧ (ℓ p - 1) * c ≤ W ∧ (L p).natAbs ≤ W ∧ A p ≤ W)
     {Na N a b j k : ℕ} (h1 : j * a ≤ Na) (h2 : j * b ≤ N) (h3 : k * a ≤ Na) (h4 : k * b ≤ N) :
-    exists_iteratedDeriv_presentation_column_Sz (exists_iteratedDeriv_presentation_column_epart ℓ r
+    existsIteratedDerivPresentationColumnSz (existsIteratedDerivPresentationColumnEpart ℓ r
         L H Dp Na N a b j k) (c ^ (2 * Na) * W ^ (2 * (N + 1)))
       (2 * (Na * c) + 2 * W) := by
-  have hf : ∀ p n, n ≤ N → exists_iteratedDeriv_presentation_column_Sz
-      (exists_iteratedDeriv_presentation_column_fac (ℓ p) (r p) (L p) (H p 1) Dp N n) (W ^ (N +
+  have hf : ∀ p n, n ≤ N → existsIteratedDerivPresentationColumnSz
+      (existsIteratedDerivPresentationColumnFac (ℓ p) (r p) (L p) (H p 1) Dp N n) (W ^ (N +
           1)) W :=
     fun p n hn => exists_iteratedDeriv_presentation_column_sz_fac (ℓ p) (r p) (L p) (hH p 1) hD (hr
         p) (hW p) hn
@@ -333,7 +333,7 @@ lemma exists_iteratedDeriv_presentation_column_sz_epart (ℓ : Fin 2 → ℕ) (r
 
 lemma exists_iteratedDeriv_presentation_column_lam_ne_zero {δ : ℂ} (hδ : δ ≠ 0) (ℓ : Fin 2 →
     ℕ) {L : Fin 2 → ℤ} (hL : ∀ p, L p ≠ 0)
-    (Na N : ℕ) : exists_iteratedDeriv_presentation_column_lam δ ℓ L Na N ≠ 0 := by
+    (Na N : ℕ) : existsIteratedDerivPresentationColumnLam δ ℓ L Na N ≠ 0 := by
   have hf : ∀ p, δ ^ (ℓ p - 1) * (L p : ℂ) ^ N ≠ 0 := fun p =>
     mul_ne_zero (pow_ne_zero _ hδ) (pow_ne_zero _ (Int.cast_ne_zero.2 (hL p)))
   exact mul_ne_zero (mul_ne_zero (mul_ne_zero (pow_ne_zero _ hδ) (hf 0)) (pow_ne_zero _ hδ)) (hf 1)
@@ -352,7 +352,7 @@ lemma exists_iteratedDeriv_presentation_column_norm_pow_le_pow {x : ℂ} {C : �
 lemma exists_iteratedDeriv_presentation_column_norm_lam_le {δ : ℂ} {C : ℝ} (hδ : ‖δ‖ ≤ C) (ℓ : Fin 2
     → ℕ) {L : Fin 2 → ℤ}
     (hL : ∀ p, ‖(L p : ℂ)‖ ≤ C) (Na N : ℕ) :
-    ‖exists_iteratedDeriv_presentation_column_lam δ ℓ L Na N‖ ≤ C ^ (Na + (ℓ 0 - 1 + N) + Na + (ℓ 1
+    ‖existsIteratedDerivPresentationColumnLam δ ℓ L Na N‖ ≤ C ^ (Na + (ℓ 0 - 1 + N) + Na + (ℓ 1
         - 1 + N)) := by
   have hf : ∀ p, ‖δ ^ (ℓ p - 1) * (L p : ℂ) ^ N‖ ≤ C ^ (ℓ p - 1 + N) := fun p =>
     exists_iteratedDeriv_presentation_column_norm_mul_le_pow
@@ -364,9 +364,9 @@ lemma exists_iteratedDeriv_presentation_column_norm_lam_le {δ : ℂ} {C : ℝ} 
               (exists_iteratedDeriv_presentation_column_norm_pow_le_pow hδ Na) (hf 0))
     (exists_iteratedDeriv_presentation_column_norm_pow_le_pow hδ Na)) (hf 1)
 
-end T2_exists_iteratedDeriv_presentation_column
+end ExistsIteratedDerivPresentationColumn
 
-open T2_exists_iteratedDeriv_presentation_column in
+open ExistsIteratedDerivPresentationColumn in
 /-- **Derivatives at a grid point, one algebraic column.** Let $x_1,x_2,y_1,y_2\in\mathbb{C}$ with
 $e^{x_1y_2}$ and $e^{x_2y_2}$ algebraic, and let $\omega,\omega_1$, $\varphi$ and $D,E_i,G_j,H_{ij}$
 be as in Lemma . There is $c\in\mathbb{N}$ such that for all $S,T,a,b,m\in\mathbb{N}$ there are
@@ -417,9 +417,9 @@ theorem exists_iteratedDeriv_presentation_column
   obtain ⟨cH, hcH⟩ := exists_iteratedDeriv_presentation_column_sz_exists_fam (fun pq : Fin 2 × Fin 2
       => H pq.1 pq.2)
   obtain ⟨c₀, hc₀⟩ : ∃ c₀, c₀ = cD + cH + 1 := ⟨_, rfl⟩
-  have hD0 : exists_iteratedDeriv_presentation_column_Sz D c₀ c₀ :=
+  have hD0 : existsIteratedDerivPresentationColumnSz D c₀ c₀ :=
       exists_iteratedDeriv_presentation_column_sz_mono hcD (by omega) (by omega)
-  have hH0 : ∀ p q, exists_iteratedDeriv_presentation_column_Sz (H p q) c₀ c₀ :=
+  have hH0 : ∀ p q, existsIteratedDerivPresentationColumnSz (H p q) c₀ c₀ :=
       fun p q => exists_iteratedDeriv_presentation_column_sz_mono (hcH (p, q)) (by omega) (by omega)
   obtain ⟨W, hW⟩ := exists_iteratedDeriv_presentation_column_exists_bound_fin2 fun p =>
     ℓ p * c₀ ^ (ℓ p - 1) + (ℓ p - 1) * c₀ + (Lc p).natAbs + A p + ℓ p
@@ -438,15 +438,15 @@ theorem exists_iteratedDeriv_presentation_column
   have hja : ∀ j : Fin T, (j : ℕ) * a ≤ Na := fun j => hNa ▸ Nat.mul_le_mul_right a j.2.le
   have hjb : ∀ j : Fin T, (j : ℕ) * b ≤ N := fun j => hN ▸ Nat.mul_le_mul_right b j.2.le
   -- the exponential factor, presented
-  have hszU : ∀ j k : Fin T, exists_iteratedDeriv_presentation_column_Sz
-      (exists_iteratedDeriv_presentation_column_epart ℓ r Lc H D Na N a b j k)
+  have hszU : ∀ j k : Fin T, existsIteratedDerivPresentationColumnSz
+      (existsIteratedDerivPresentationColumnEpart ℓ r Lc H D Na N a b j k)
       (c₀ ^ (2 * Na) * W ^ (2 * (N + 1))) (2 * (Na * c₀) + 2 * W) := fun j k =>
     exists_iteratedDeriv_presentation_column_sz_epart ℓ r Lc A hH0 hD0 hr2
       (fun p => ⟨(hW' p).1, (hW' p).2.1, (hW' p).2.2.1, (hW' p).2.2.2.1⟩)
       (hja j) (hjb j) (hja k) (hjb k)
   obtain ⟨P, hPl, hPx, hPy, hPid⟩ :=
-      hSH S T a b m (exists_iteratedDeriv_presentation_column_lam (φ D) ℓ Lc Na N) _ _
-    (fun j k => exists_iteratedDeriv_presentation_column_epart ℓ r Lc H D Na N a b j k) (fun j k =>
+      hSH S T a b m (existsIteratedDerivPresentationColumnLam (φ D) ℓ Lc Na N) _ _
+    (fun j k => existsIteratedDerivPresentationColumnEpart ℓ r Lc H D Na N a b j k) (fun j k =>
         (hszU j k).1)
     (fun j k => (hszU j k).2.1) (fun j k => (hszU j k).2.2)
     (fun j k => exists_iteratedDeriv_presentation_column_epart_eval φ x₁ x₂ y₁ y₂ ℓ r Lc H D hH hr1
@@ -459,7 +459,7 @@ theorem exists_iteratedDeriv_presentation_column
     have e5 : 2 * c₀ * Na ≤ c * Na := Nat.mul_le_mul_right _ (by omega)
     have e6 : 2 * (Na * c₀) = 2 * c₀ * Na := by ring
     omega
-  refine ⟨φ D ^ (m + S) * exists_iteratedDeriv_presentation_column_lam (φ D) ℓ Lc Na N,
+  refine ⟨φ D ^ (m + S) * existsIteratedDerivPresentationColumnLam (φ D) ℓ Lc Na N,
     mul_ne_zero (pow_ne_zero _ hD) (exists_iteratedDeriv_presentation_column_lam_ne_zero hD ℓ hLc Na
         N), ?_, P, fun i j k => ?_,
     fun i j k r' => (hPx i j k r').trans hdeg, fun i j k => (hPy i j k).trans hdeg, hPid⟩
@@ -486,7 +486,7 @@ theorem exists_iteratedDeriv_presentation_column
       have f3 : (c₁ + 2) * (1 + m + S) = c₁ * (1 + m + S) + 2 * (1 + m + S) := by ring
       have f4 : 2 * (Na + N) ≤ c * (Na + N) := Nat.mul_le_mul_right _ (by omega)
       omega
-    calc exists_iteratedDeriv_presentation_column_len (P i j k)
+    calc existsIteratedDerivPresentationColumnLen (P i j k)
         ≤ c₁ ^ (c₁ * (1 + m + S)) * (1 + m + S + T + a + b) ^ (c₁ * (1 + m + S)) *
             (c₀ ^ (2 * Na) * W ^ (2 * (N + 1))) := hPl i j k
       _ ≤ c ^ (c₁ * (1 + m + S)) * (1 + m + S + T + a + b) ^ (c * (1 + m + S)) *

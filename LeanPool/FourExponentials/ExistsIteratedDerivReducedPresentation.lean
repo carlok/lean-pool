@@ -43,7 +43,7 @@ proof accepted on Prove2Me as `FourExp.exists_iteratedDeriv_reduced_presentation
 
 namespace FourExponentials
 
-namespace S7W3_exists_iteratedDeriv_reduced_presentation
+namespace ExistsIteratedDerivReducedPresentation
 
 open Polynomial
 
@@ -79,9 +79,9 @@ lemma monomial_mul_degrees (P : ℤ[X][X]) (μ ν : ℕ) {e n : ℕ}
           · exact natDegree_X_pow_le ν
       _ = ν + n := by ring
 
-end S7W3_exists_iteratedDeriv_reduced_presentation
+end ExistsIteratedDerivReducedPresentation
 
-open Polynomial S7W3_exists_iteratedDeriv_reduced_presentation in
+open Polynomial ExistsIteratedDerivReducedPresentation in
 /-- Write `φ(P) = P(ω, ω₁)`. Take `R_{ijkμν} = (X^μ Y^ν P_{ijk}) mod Q`, where `P_{ijk}` and `Λ`
 come from the presentation of the derivatives with coefficients `f_{ijk} = ∑ q_{ijkμν} ω^μ ω₁^ν`.
 Since `φ(Q) = 0`, `φ(R_{ijkμν}) = ω^μ ω₁^ν φ(P_{ijk})`, which gives the identity after summing

@@ -33,7 +33,7 @@ proof accepted on Prove2Me as `Transcendence.exists_irreducible_factor_cofactor_
 
 namespace FourExponentials.Transcendence
 
-namespace S7W4_exists_irreducible_factor_cofactor_bound
+namespace ExistsIrreducibleFactorCofactorBound
 
 open Polynomial
 
@@ -99,9 +99,9 @@ lemma good_of_not_dvd (Q T : ℤ[X]) (θ : ℂ) (hQ : Irreducible Q) (hQd : 0 < 
     natDegree_map_eq_of_injective Int.cast_injective, ← aeval_eq_eval_map, ← aeval_eq_eval_map,
     max_eq_right hmin] at hl
 
-end S7W4_exists_irreducible_factor_cofactor_bound
+end ExistsIrreducibleFactorCofactorBound
 
-open Polynomial S7W4_exists_irreducible_factor_cofactor_bound in
+open Polynomial ExistsIrreducibleFactorCofactorBound in
 /-- **The cofactor of an irreducible factor.** Let $P\in\mathbb{Z}[X]$ have positive degree and let
 $\theta\in\mathbb{C}$. Then $P=Q^{e}R$ with $Q,R\in\mathbb{Z}[X]$, $Q$ irreducible of positive
 degree, $e\ge1$, and

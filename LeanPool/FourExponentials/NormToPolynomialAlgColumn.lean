@@ -49,7 +49,7 @@ proof accepted on Prove2Me as `FourExp.norm_to_polynomial_alg_column`.
 
 namespace FourExponentials
 
-namespace T2_norm_to_polynomial_alg_column
+namespace NormToPolynomialAlgColumn
 
 open Polynomial
 
@@ -95,9 +95,9 @@ lemma norm_to_polynomial_alg_column_le_exp_mul {x A : ℝ} (hx : 0 ≤ x) (hA : 
     * A) := by
   nlinarith [Real.add_one_le_exp (x * A), mul_le_mul_of_nonneg_left hA hx]
 
-end T2_norm_to_polynomial_alg_column
+end NormToPolynomialAlgColumn
 
-open Polynomial T2_norm_to_polynomial_alg_column in
+open Polynomial NormToPolynomialAlgColumn in
 /-- **A small polynomial, one algebraic column.** Let $x_1,x_2,y_1,y_2,\omega,\omega_1\in\mathbb{C}$
 and let $Q\in\mathbb{Z}[X][Y]$ be monic in $Y$ with $Q(\omega,\omega_1)=0$ and minimal there, and
 suppose that the derivatives of the functions $F_q$ have reduced presentations as in the conclusion

@@ -38,7 +38,7 @@ proof accepted on Prove2Me as `Transcendence.norm_resultant_le_max_norm_eval`.
 
 namespace FourExponentials.Transcendence
 
-namespace S7W4_norm_resultant_le_max_norm_eval
+namespace NormResultantLeMaxNormEval
 
 open Polynomial
 
@@ -141,9 +141,9 @@ lemma bound_near (F G : ℂ[X]) (θ α1 : ℂ) (h1 : α1 ∈ F.roots)
           by ring, pow_mul, pow_succ]
         ring
 
-end S7W4_norm_resultant_le_max_norm_eval
+end NormResultantLeMaxNormEval
 
-open Polynomial S7W4_norm_resultant_le_max_norm_eval in
+open Polynomial NormResultantLeMaxNormEval in
 /-- **Liouville's inequality through the resultant.** Let $F,G\in\mathbb{C}[X]$ with $M(F)\ge1$ and
 $M(G)\ge1$. Then for every $\theta\in\mathbb{C}$
 $$ |\operatorname{Res}(F,G)|\le2^{\deg F\deg G}M(F)^{\deg G}M(G)^{\deg

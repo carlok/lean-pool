@@ -41,7 +41,7 @@ proof accepted on Prove2Me as `Transcendence.length_mul_le`.
 
 namespace FourExponentials.Transcendence
 
-namespace S7W3_length_mul_le
+namespace LengthMulLe
 
 open Polynomial
 
@@ -97,9 +97,9 @@ theorem lam_mul_le (ν : R → ℕ) (hν : ν 0 = 0) (hadd : ∀ a b, ν (a + b)
   rw [coeff_hat ν hν, coeff_hat ν hν]
   exact hmul _ _
 
-end S7W3_length_mul_le
+end LengthMulLe
 
-open S7W3_length_mul_le in
+open LengthMulLe in
 /-- **Length of a product.** For all $P,Q\in\mathbb{Z}[X][Y]$, $L(PQ)\le L(P)\,L(Q)$. -/
 theorem length_mul_le (P Q : Polynomial (Polynomial ℤ)) :
     ∑ k ∈ (P * Q).support, ∑ i ∈ ((P * Q).coeff k).support, (((P * Q).coeff k).coeff i).natAbs ≤

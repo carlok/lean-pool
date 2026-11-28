@@ -39,26 +39,26 @@ proof accepted on Prove2Me as `Transcendence.exp_e_or_exp_e_sq_transcendental`.
 
 namespace FourExponentials.Transcendence
 
-namespace T2_exp_e_or_exp_e_sq_transcendental
+namespace ExpEOrExpESqTranscendental
 
 /-! ## Numbers algebraic over `ℚ[x]` -/
 
 /-- The complex numbers algebraic over `ℚ[x]`, as a `ℚ`-subalgebra of `ℂ`. -/
-noncomputable def exp_e_or_exp_e_sq_transcendental_algOver (x : ℂ) : Subalgebra ℚ ℂ :=
+noncomputable def expEOrExpESqTranscendentalAlgOver (x : ℂ) : Subalgebra ℚ ℂ :=
   (Subalgebra.algebraicClosure ↥(Algebra.adjoin ℚ ({x} : Set ℂ)) ℂ).restrictScalars ℚ
 
 theorem exp_e_or_exp_e_sq_transcendental_mem_algOver_of_isAlgebraic {x z : ℂ} (h : IsAlgebraic ℚ z)
-    : z ∈ exp_e_or_exp_e_sq_transcendental_algOver x :=
+    : z ∈ expEOrExpESqTranscendentalAlgOver x :=
   h.extendScalars (algebraMap ℚ ↥(Algebra.adjoin ℚ ({x} : Set ℂ))).injective
 
 theorem exp_e_or_exp_e_sq_transcendental_self_mem_algOver (x : ℂ) : x ∈
-    exp_e_or_exp_e_sq_transcendental_algOver x :=
+    expEOrExpESqTranscendentalAlgOver x :=
   isAlgebraic_algebraMap (⟨x, Algebra.subset_adjoin rfl⟩ : ↥(Algebra.adjoin ℚ ({x} : Set ℂ)))
 
 /-- If every element of `S` is algebraic over `ℚ[x]`, no two elements of `S` are algebraically
 independent over `ℚ`: they would sit in `ℚ[S]`, of transcendence degree at most one. -/
 theorem exp_e_or_exp_e_sq_transcendental_not_algIndep_of_forall_mem_algOver {x : ℂ} {S : Set ℂ} (hS
-    : ∀ s ∈ S, s ∈ exp_e_or_exp_e_sq_transcendental_algOver x)
+    : ∀ s ∈ S, s ∈ expEOrExpESqTranscendentalAlgOver x)
     {a b : ℂ} (ha : a ∈ S) (hb : b ∈ S) : ¬ AlgebraicIndependent ℚ ![a, b] := fun hab => by
   have hv : AlgebraicIndependent ℚ (![⟨a, Algebra.subset_adjoin ha⟩, ⟨b,
       Algebra.subset_adjoin hb⟩] :
@@ -91,9 +91,9 @@ theorem linIndep_one_exp_one (he : Transcendental ℚ (Complex.exp 1)) :
     rw [h']
     exact isAlgebraic_ratCast ℚ _
 
-end T2_exp_e_or_exp_e_sq_transcendental
+end ExpEOrExpESqTranscendental
 
-open T2_exp_e_or_exp_e_sq_transcendental in
+open ExpEOrExpESqTranscendental in
 /-- **Schneider's eighth problem.** At least one of the numbers $e^{e}$ and $e^{e^{2}}$ is
 transcendental. -/
 theorem exp_e_or_exp_e_sq_transcendental :

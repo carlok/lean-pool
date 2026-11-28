@@ -40,7 +40,7 @@ proof accepted on Prove2Me as `Transcendence.exists_int_pow_repr`.
 
 namespace FourExponentials.Transcendence
 
-namespace S7W3_exists_int_pow_repr
+namespace ExistsIntPowRepr
 
 open Polynomial
 
@@ -112,9 +112,9 @@ theorem coeff_red_le {H : ℕ} (hH : ∀ i, (m.coeff i).natAbs ≤ H) :
           Nat.add_le_add (Nat.mul_le_mul le_rfl hX) (Nat.mul_le_mul (ih _) (hH l))
       _ = (m.leadingCoeff.natAbs + H) ^ n * (m.leadingCoeff.natAbs + H) := by ring
 
-end S7W3_exists_int_pow_repr
+end ExistsIntPowRepr
 
-open S7W3_exists_int_pow_repr Polynomial in
+open ExistsIntPowRepr Polynomial in
 /-- **Scaled powers of an algebraic number.** Let $K$ be a field of characteristic zero and let
 $\alpha\in K$ be algebraic over $\mathbb{Q}$. There are $\ell,A\in\mathbb{N}$ and an integer
 $L\neq0$ such that for every $n\in\mathbb{N}$ there are integers $r_0,\dots,r_{\ell-1}$ with

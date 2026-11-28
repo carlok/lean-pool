@@ -47,7 +47,7 @@ proof accepted on Prove2Me as `FourExp.aux_linear_system_column`.
 
 namespace FourExponentials
 
-namespace T2_aux_linear_system_column
+namespace AuxLinearSystemColumn
 
 /-- A single integer coefficient of `P ∈ ℤ[X][Y]` is at most its length. -/
 theorem aux_linear_system_column_natAbs_coeff_le_length (P : Polynomial (Polynomial ℤ)) (k i : ℕ) :
@@ -62,7 +62,7 @@ theorem aux_linear_system_column_natAbs_coeff_le_length (P : Polynomial (Polynom
     · rw [Polynomial.notMem_support_iff.1 hi]; simp
   · rw [Polynomial.notMem_support_iff.1 hk]; simp
 
-end T2_aux_linear_system_column
+end AuxLinearSystemColumn
 
 open Polynomial
 
@@ -216,7 +216,7 @@ theorem aux_linear_system_column
       have : (0 : ℝ) ≤ (N : ℝ) * Real.sqrt (Real.log (N : ℝ)) := by positivity
       push_cast; linarith
     refine (Nat.cast_le.2
-        ((T2_aux_linear_system_column.aux_linear_system_column_natAbs_coeff_le_length _ r h).trans
+        ((AuxLinearSystemColumn.aux_linear_system_column_natAbs_coeff_le_length _ r h).trans
       (hRl a b m i j k μ ν))).trans ?_
     refine (hκb N S (2 * N) a b m hN3 hSr hm.le le_rfl hA hB).trans ?_
     exact Real.exp_le_exp.2 (mul_le_mul_of_nonneg_right (by linarith) (by positivity))

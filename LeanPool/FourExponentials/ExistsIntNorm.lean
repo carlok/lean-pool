@@ -49,7 +49,7 @@ namespace FourExponentials
 
 open Polynomial
 
-namespace S7W3_exists_int_norm
+namespace ExistsIntNorm
 
 /-- Size of `p ∈ ℤ[X]`: some `ph ∈ ℕ[X]` majorizes `p` coefficientwise, with `ph(1) ≤ b` and
 `deg ph ≤ D`. -/
@@ -195,9 +195,9 @@ lemma det_factor {d : ℕ} (hd : 0 < d) (A : Matrix (Fin d) (Fin d) ℂ) (v : Fi
     smul_eq_mul, hv0, mul_one] at h2
   exact h2.symm
 
-end S7W3_exists_int_norm
+end ExistsIntNorm
 
-open Polynomial S7W3_exists_int_norm
+open Polynomial ExistsIntNorm
 
 /-- **Norms down to $\Q(\omega)$.** Let $\omega,\omega_1\in\mathbb{C}$ and let
 $Q\in\mathbb{Z}[X][Y]$ be monic in $Y$ of degree $d$, with $Q(\omega,\omega_1)=0$ and minimal there.

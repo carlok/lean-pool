@@ -37,7 +37,7 @@ proof accepted on Prove2Me as `FourExp.exists_pow_mul_pow_le_exp_sq_mul_sqrt_log
 
 namespace FourExponentials
 
-namespace S7W3_exists_pow_mul_pow_le_exp_sq_mul_sqrt_log
+namespace ExistsPowMulPowLeExpSqMulSqrtLog
 
 /-- `log x ≥ 1` for `x ≥ 3`, since `e < 3`. -/
 lemma one_le_log_of_three_le {x : ℝ} (hx : 3 ≤ x) : 1 ≤ Real.log x :=
@@ -101,9 +101,9 @@ lemma exists_pow_mul_pow_le_exp_sq_mul_sqrt_log_exponent_le (c r n s S T a b m :
     mul_le_mul_of_nonneg_left hZP (mul_nonneg hc0 hlr),
     mul_le_mul_of_nonneg_left (mul_le_mul_of_nonneg_right hZs hs0) hc0]
 
-end S7W3_exists_pow_mul_pow_le_exp_sq_mul_sqrt_log
+end ExistsPowMulPowLeExpSqMulSqrtLog
 
-open S7W3_exists_pow_mul_pow_le_exp_sq_mul_sqrt_log in
+open ExistsPowMulPowLeExpSqMulSqrtLog in
 /-- The size bound at the scale `N² √(log N)`. For `c = 0` the left side is `1`. For `c ≥ 1`
 write it as `exp (c (1 + m + S + T (a + b)) log c + c (1 + m + S) log (1 + m + S + T + a + b))`
 and apply `exists_pow_mul_pow_le_exp_sq_mul_sqrt_log_exponent_le` with `s = √(log N)`, which

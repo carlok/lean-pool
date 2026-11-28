@@ -52,7 +52,7 @@ namespace FourExponentials
 
 open Filter Topology Polynomial
 
-namespace W5_transcendence_criterion_continuous
+namespace TranscendenceCriterionContinuous
 
 /-- At a transcendental `α`, the non-zero integer polynomials of bounded degree and height take
 values bounded away from `0`: there are finitely many of them. -/
@@ -78,9 +78,9 @@ theorem exists_pos_le_norm_aeval (α : ℂ) (hα : Transcendental ℚ α) (D : �
   · exact ⟨_, (Finset.lt_inf'_iff hne).2 hval, fun Q h0 hD hK =>
       Finset.inf'_le _ (hfin.mem_toFinset.2 ⟨h0, hD, hK⟩)⟩
 
-end W5_transcendence_criterion_continuous
+end TranscendenceCriterionContinuous
 
-open W5_transcendence_criterion_continuous in
+open TranscendenceCriterionContinuous in
 /-- **The criterion for continuous growth functions.** Let $\alpha\in\mathbb{C}$ and
 $\varepsilon>0$. Let $\sigma_1,\sigma_2\colon\mathbb{R}\to\mathbb{R}$ be continuous, strictly
 increasing and tending to $+\infty$, and let $a_1,a_2\ge1$ be such that for every $x\ge1$

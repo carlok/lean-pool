@@ -35,7 +35,7 @@ proof accepted on Prove2Me as `FourExp.trdeg_one_presentation_column`.
 
 namespace FourExponentials
 
-namespace T2_trdeg_one_presentation_column
+namespace TrdegOnePresentationColumn
 
 /-- In `ℚ[S] ⊆ ℂ` of transcendence degree at most one, every element is algebraic over `ℚ(ω)`,
 for any transcendental `ω ∈ ℚ[S]`. -/
@@ -63,9 +63,9 @@ lemma trdeg_one_presentation_column_isAlgebraic_of_trdeg_le_one (S : Set ℂ) (h
   have := hcard.trans htr
   norm_num at this
 
-end T2_trdeg_one_presentation_column
+end TrdegOnePresentationColumn
 
-open T2_trdeg_one_presentation_column in
+open TrdegOnePresentationColumn in
 /-- **Presenting the field, one algebraic column.** If $x_1,x_2,y_1,y_2$ satisfy the column
 hypotheses, then they have presentation data. -/
 theorem trdeg_one_presentation_column

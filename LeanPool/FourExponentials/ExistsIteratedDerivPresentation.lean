@@ -46,7 +46,7 @@ proof accepted on Prove2Me as `FourExp.exists_iteratedDeriv_presentation`.
 
 namespace FourExponentials
 
-namespace S7W3_exists_iteratedDeriv_presentation
+namespace ExistsIteratedDerivPresentation
 
 open Polynomial
 
@@ -254,7 +254,7 @@ noncomputable def epart (ℓ : Fin 2 → Fin 2 → ℕ) (r : Fin 2 → Fin 2 →
     fac (ℓ 1 1) (r 1 1) (L 1 1) (H 1 1) Dp N (k * b)
 
 /-- The constant `Λ' = ∏_{p,q} δ^(ℓ_{pq}-1) L_{pq}^N`. -/
-noncomputable def exists_iteratedDeriv_presentation_lam (δ : ℂ) (ℓ : Fin 2 → Fin 2 → ℕ) (L : Fin 2 →
+noncomputable def existsIteratedDerivPresentationLam (δ : ℂ) (ℓ : Fin 2 → Fin 2 → ℕ) (L : Fin 2 →
     Fin 2 → ℤ) (N : ℕ) : ℂ :=
   δ ^ (ℓ 0 0 - 1) * (L 0 0 : ℂ) ^ N * (δ ^ (ℓ 0 1 - 1) * (L 0 1 : ℂ) ^ N) *
     (δ ^ (ℓ 1 0 - 1) * (L 1 0 : ℂ) ^ N) * (δ ^ (ℓ 1 1 - 1) * (L 1 1 : ℂ) ^ N)
@@ -279,12 +279,12 @@ lemma epart_eval (φ : ℤ[X][X] →+* ℂ) (x₁ x₂ y₁ y₂ : ℂ) (ℓ : F
     (hr : ∀ p q n, (L p q : ℂ) ^ n * Complex.exp (![x₁, x₂] p * ![y₁, y₂] q) ^ n =
       ∑ t ∈ Finset.range (ℓ p q), (r p q n t : ℂ) * Complex.exp (![x₁, x₂] p * ![y₁, y₂] q) ^ t)
     {N a b j k : ℕ} (h1 : j * a ≤ N) (h2 : j * b ≤ N) (h3 : k * a ≤ N) (h4 : k * b ≤ N) :
-    φ (epart ℓ r L H Dp N a b j k) = exists_iteratedDeriv_presentation_lam (φ Dp) ℓ L N *
+    φ (epart ℓ r L H Dp N a b j k) = existsIteratedDerivPresentationLam (φ Dp) ℓ L N *
       Complex.exp (((j : ℂ) * x₁ + (k : ℂ) * x₂) * ((a : ℂ) * y₁ + (b : ℂ) * y₂)) := by
   rw [epart, map_mul φ, map_mul φ, map_mul φ,
     fac_eval φ _ _ _ _ _ (hH 0 0) (hr 0 0) h1, fac_eval φ _ _ _ _ _ (hH 0 1) (hr 0 1) h2,
     fac_eval φ _ _ _ _ _ (hH 1 0) (hr 1 0) h3, fac_eval φ _ _ _ _ _ (hH 1 1) (hr 1 1) h4,
-    exp_split x₁ x₂ y₁ y₂ a b j k, exists_iteratedDeriv_presentation_lam]
+    exp_split x₁ x₂ y₁ y₂ a b j k, existsIteratedDerivPresentationLam]
   ring
 
 lemma sz_epart (ℓ : Fin 2 → Fin 2 → ℕ) (r : Fin 2 → Fin 2 → ℕ → ℕ → ℤ) (L : Fin 2 → Fin 2 → ℤ)
@@ -301,7 +301,7 @@ lemma sz_epart (ℓ : Fin 2 → Fin 2 → ℕ) (r : Fin 2 → Fin 2 → ℕ → 
     (le_of_eq (by ring)) (by omega)
 
 lemma lam_ne_zero {δ : ℂ} (hδ : δ ≠ 0) (ℓ : Fin 2 → Fin 2 → ℕ) {L : Fin 2 → Fin 2 → ℤ}
-    (hL : ∀ p q, L p q ≠ 0) (N : ℕ) : exists_iteratedDeriv_presentation_lam δ ℓ L N ≠ 0 := by
+    (hL : ∀ p q, L p q ≠ 0) (N : ℕ) : existsIteratedDerivPresentationLam δ ℓ L N ≠ 0 := by
   have hf : ∀ p q, δ ^ (ℓ p q - 1) * (L p q : ℂ) ^ N ≠ 0 := fun p q =>
     mul_ne_zero (pow_ne_zero _ hδ) (pow_ne_zero _ (Int.cast_ne_zero.2 (hL p q)))
   exact mul_ne_zero (mul_ne_zero (mul_ne_zero (hf 0 0) (hf 0 1)) (hf 1 0)) (hf 1 1)
@@ -317,7 +317,7 @@ lemma norm_pow_le_pow {x : ℂ} {C : ℝ} (hx : ‖x‖ ≤ C) (n : ℕ) : ‖x 
 
 lemma norm_lam_le {δ : ℂ} {C : ℝ} (hδ : ‖δ‖ ≤ C) (ℓ : Fin 2 → Fin 2 → ℕ)
     {L : Fin 2 → Fin 2 → ℤ} (hL : ∀ p q, ‖(L p q : ℂ)‖ ≤ C) (N : ℕ) :
-    ‖exists_iteratedDeriv_presentation_lam δ ℓ L N‖ ≤
+    ‖existsIteratedDerivPresentationLam δ ℓ L N‖ ≤
       C ^ (ℓ 0 0 - 1 + N + (ℓ 0 1 - 1 + N) + (ℓ 1 0 - 1 + N) + (ℓ 1 1 - 1 + N)) := by
   have hf : ∀ p q, ‖δ ^ (ℓ p q - 1) * (L p q : ℂ) ^ N‖ ≤ C ^ (ℓ p q - 1 + N) := fun p q =>
     norm_mul_le_pow (norm_pow_le_pow hδ _) (norm_pow_le_pow (hL p q) N)
@@ -500,7 +500,7 @@ theorem exists_iteratedDeriv_presentation_main (x₁ x₂ y₁ y₂ : ℂ)
     have e3 : 2 * c₀ * (m + S) ≤ c * (m + S) := Nat.mul_le_mul_right (m + S) (by omega)
     have e4 : c * (1 + m + S) = c + c * (m + S) := by ring
     omega
-  refine ⟨φ D ^ (m + S) * exists_iteratedDeriv_presentation_lam (φ D) ℓ L N,
+  refine ⟨φ D ^ (m + S) * existsIteratedDerivPresentationLam (φ D) ℓ L N,
       mul_ne_zero (pow_ne_zero _ hD) (lam_ne_zero hD ℓ hL N),
     ?_, fun i j k => Ppol ℓ r L D E G H S a b m N i j k, fun i j k => ?_,
     fun i j k r' => ((hsz i j k).2.1 r').trans hdeg, fun i j k => (hsz i j k).2.2.trans hdeg,
@@ -548,9 +548,9 @@ theorem exists_iteratedDeriv_presentation_main (x₁ x₂ y₁ y₂ : ℂ)
       (epart_eval φ x₁ x₂ y₁ y₂ ℓ r L H D hH hr1 (hja j) (hjb j) (hja k) (hjb k)) i.2]
     exact mul_left_comm _ _ _
 
-end S7W3_exists_iteratedDeriv_presentation
+end ExistsIteratedDerivPresentation
 
-open S7W3_exists_iteratedDeriv_presentation
+open ExistsIteratedDerivPresentation
 
 /-- **Derivatives at a grid point, presented.** Let $x_1,x_2,y_1,y_2\in\mathbb{C}$ with every
 $e^{x_iy_j}$ algebraic. Let $\omega,\omega_1\in\mathbb{C}$, let $\varphi$ be evaluation at

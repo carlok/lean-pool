@@ -40,7 +40,7 @@ proof accepted on Prove2Me as `FourExp.exists_iteratedDeriv_reduced_presentation
 
 namespace FourExponentials
 
-namespace T2_exists_iteratedDeriv_reduced_presentation_column
+namespace ExistsIteratedDerivReducedPresentationColumn
 
 open Polynomial
 
@@ -77,9 +77,9 @@ lemma exists_iteratedDeriv_reduced_presentation_column_monomial_mul_degrees (P :
           · exact natDegree_X_pow_le ν
       _ = ν + n := by ring
 
-end T2_exists_iteratedDeriv_reduced_presentation_column
+end ExistsIteratedDerivReducedPresentationColumn
 
-open Polynomial T2_exists_iteratedDeriv_reduced_presentation_column in
+open Polynomial ExistsIteratedDerivReducedPresentationColumn in
 /-- **Reduced presentations, one algebraic column.** In the setting of Lemma , let moreover
 $Q\in\mathbb{Z}[X][Y]$ be monic in $Y$ with $\varphi(Q)=0$. Then the conclusion of Lemma holds with
 the $X$-degree bound $M+c(1+m+S+Ta)$ in place of $M+c(1+m+S)$. -/
