@@ -5,9 +5,10 @@ summary: 'Proves the four exponentials theorem in transcendence degree one, due 
   exponentials are algebraic, with λ₁₁ λ₂₂ = λ₁₂ λ₂₁, and the field they generate has
   transcendence degree at most one over ℚ, then the rows or the columns of the matrix (λᵢⱼ) are
   linearly dependent over ℚ. Without the hypothesis on the transcendence degree this is the open
-  four exponentials conjecture. Two consequences are proved with it: Schneider''s eighth problem,
-  that one of e^e and e^{e²} is transcendental, and that two of the eight numbers xᵢ, yⱼ,
-  exp(xᵢ yⱼ) are algebraically independent when exp(x₁ y₂) and exp(x₂ y₂) are algebraic. The
+  four exponentials conjecture. The project also solves Schneider''s eighth problem, showing
+  that at least one of e^e and e^{e²} is transcendental, and proves Waldschmidt''s column theorem:
+  if (x₁, x₂) and (y₁, y₂) are each linearly independent over ℚ and exp(x₁ y₂) and exp(x₂ y₂)
+  are algebraic, two of the eight numbers xᵢ, yⱼ, exp(xᵢ yⱼ) are algebraically independent. The
   proof is Waldschmidt''s of 1973 with the tools of his 1971 paper: Siegel''s lemma gives an
   auxiliary function Σ c(i, j, h) zⁱ e^{(j x₁ + h x₂) z} with many zeros, an extrapolation and a
   zero count for exponential polynomials show that one of its derivatives does not vanish on the
@@ -38,7 +39,8 @@ provenance: AI
 provenance_evidence: The upstream formalization.yaml states that Claude agents (Claude Code) wrote
   the Lean proofs under the author's direction, one statement at a time, checked on the Prove2Me
   platform and then mirrored into carlok/diaz-modulus-lean, from which carlok/four-exponentials-palomar
-  is an extract.
+  is an extract. The headline theorem was separately registered with Palomar from
+  carlok/four-exponentials-trdeg-one-lean at 0c87279c91e0959343f4af77f8e25afc97c0be0d.
 main_declarations:
 - FourExponentials.four_exponentials_trdeg_one
 - FourExponentials.Transcendence.exp_e_or_exp_e_sq_transcendental
