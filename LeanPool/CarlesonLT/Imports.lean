@@ -9,6 +9,7 @@ module  -- shake: keep-all --deprecated_module: ignore
 public import LeanPool.CarlesonLT
 public import LeanPool.CarlesonLT.Auto.AnisotropicCarleson
 public import LeanPool.CarlesonLT.Auto.ClassicalCarleson
+public import LeanPool.CarlesonLT.Auto.FourierKernels
 public import LeanPool.CarlesonLT.Auto.HardyLittlewoodMaximal
 public import LeanPool.CarlesonLT.Auto.ModelOperator
 public import LeanPool.CarlesonLT.Auto.ParametricIntegralContDiff
