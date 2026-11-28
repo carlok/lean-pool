@@ -1,0 +1,105 @@
+/-
+Copyright (c) 2026 Carlo Perassi. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Carlo Perassi
+-/
+module
+
+public import LeanPool.FourExponentials.ConstructionCore1973
+public import LeanPool.FourExponentials.ConstructionCount1973
+public import LeanPool.FourExponentials.ConstructionGrowth
+public import LeanPool.FourExponentials.RankOneParametrization
+public import Mathlib.Tactic.NormNum
+public import Mathlib.Tactic.Positivity
+
+/-!
+# The construction
+
+Let $l_{11},l_{12},l_{21},l_{22}$ satisfy the hypotheses of Lemma . Then there are a transcendental
+$\omega$, functions $\sigma_1,\sigma_2$ and constants $a_1,a_2\ge1$ satisfying the hypotheses of
+Theorem , and pairs $x_1,x_2$ and $y_1,y_2$, each linearly independent over $\mathbb{Q}$, with the
+following property. For every $C$ and every large $N$ there are natural numbers $S,T,R_1,R_2,S'$,
+coefficients $c(i,j,h)\in\mathbb{C}$ ($i<S$, $j,h<T$), not all zero, and $\lambda>0$ such that
+* the inequality of Lemma holds, and
+* whenever $a<R_1$, $b<R_2$, $s<S'$ and $G^{(s)}(ay_1+by_2)\neq0$, where
+$$ G(z)=\sum_{i<S}\sum_{j,h<T}c(i,j,h)\,z^{i}e^{(jx_1+hx_2)z}, $$
+some $P\in\mathbb{Z}[X]$ is small at $\omega$ for $(N,C)$ with respect to $\sigma_1,\sigma_2$.
+
+Source: [Wal73, § III, (4) and Lemmes 4, 5, 7].
+
+## References
+
+* [Wal73] M. Waldschmidt, *Solution du huitième problème de Schneider*, J. Number Theory 5 (1973),
+  191–202.
+
+From `Diaz/Mirror/auxiliary_construction.lean` of
+[diaz-modulus-lean](https://github.com/carlok/diaz-modulus-lean) at `465147a`, where it mirrors the
+proof accepted on Prove2Me as `FourExp.auxiliary_construction`.
+-/
+
+@[expose] public section
+
+namespace FourExponentials
+
+open Filter Topology
+
+/-- **The construction.** Let $l_{11},l_{12},l_{21},l_{22}$ satisfy the hypotheses of Lemma . Then
+there are a transcendental $\omega$, functions $\sigma_1,\sigma_2$ and constants $a_1,a_2\ge1$
+satisfying the hypotheses of Theorem , and pairs $x_1,x_2$ and $y_1,y_2$, each linearly independent
+over $\mathbb{Q}$, with the following property. For every $C$ and every large $N$ there are natural
+numbers $S,T,R_1,R_2,S'$, coefficients $c(i,j,h)\in\mathbb{C}$ ($i<S$, $j,h<T$), not all zero, and
+$\lambda>0$ such that
+* the inequality of Lemma holds, and
+* whenever $a<R_1$, $b<R_2$, $s<S'$ and $G^{(s)}(ay_1+by_2)\neq0$, where
+$$ G(z)=\sum_{i<S}\sum_{j,h<T}c(i,j,h)\,z^{i}e^{(jx_1+hx_2)z}, $$
+some $P\in\mathbb{Z}[X]$ is small at $\omega$ for $(N,C)$ with respect to $\sigma_1,\sigma_2$. -/
+theorem auxiliary_construction :
+    ∀ l₁₁ l₁₂ l₂₁ l₂₂ : ℂ,
+      IsAlgebraic ℚ (Complex.exp l₁₁) → IsAlgebraic ℚ (Complex.exp l₁₂) →
+      IsAlgebraic ℚ (Complex.exp l₂₁) → IsAlgebraic ℚ (Complex.exp l₂₂) →
+      l₁₁ ≠ 0 → l₁₂ ≠ 0 → l₂₁ ≠ 0 → l₂₂ ≠ 0 →
+      l₁₁ * l₂₂ = l₁₂ * l₂₁ →
+      Algebra.trdeg ℚ ↥(Algebra.adjoin ℚ ({l₁₁, l₁₂, l₂₁, l₂₂} : Set ℂ)) ≤ 1 →
+      ¬ (∃ a b : ℚ, ¬(a = 0 ∧ b = 0) ∧
+          (a : ℂ) * l₁₁ + (b : ℂ) * l₂₁ = 0 ∧ (a : ℂ) * l₁₂ + (b : ℂ) * l₂₂ = 0) →
+      ¬ (∃ a b : ℚ, ¬(a = 0 ∧ b = 0) ∧
+          (a : ℂ) * l₁₁ + (b : ℂ) * l₁₂ = 0 ∧ (a : ℂ) * l₂₁ + (b : ℂ) * l₂₂ = 0) →
+      ∃ ω : ℂ, Transcendental ℚ ω ∧
+        ∃ σ₁ σ₂ : ℝ → ℝ, StrictMono σ₁ ∧ StrictMono σ₂ ∧
+          Tendsto σ₁ atTop atTop ∧ Tendsto σ₂ atTop atTop ∧
+          ∃ a₁ a₂ : ℝ, 1 ≤ a₁ ∧ 1 ≤ a₂ ∧
+            (∀ x : ℝ, 0 < x → σ₂ x ≤ σ₁ x) ∧
+            (∀ x : ℝ, 0 < x → σ₁ (x + 1) ≤ a₁ * σ₁ x) ∧
+            (∀ x : ℝ, 0 < x → σ₂ (x + 1) ≤ a₂ * σ₂ x) ∧
+          ∃ x₁ x₂ y₁ y₂ : ℂ, LinearIndependent ℚ ![x₁, x₂] ∧ LinearIndependent ℚ ![y₁, y₂] ∧
+            ∀ C : ℝ, ∃ N₀ : ℕ, ∀ N : ℕ, N₀ < N →
+              ∃ (S T R₁ R₂ S' : ℕ) (c : Fin S → Fin T → Fin T → ℂ), (∃ i j k, c i j k ≠ 0) ∧
+              (∃ lam : ℝ, 0 < lam ∧ (((S * T * T : ℕ) : ℝ) / lam
+              + 2 * (1 + ((S * T * T : ℕ) : ℝ) ^ lam) / (lam * Real.log ((S * T * T : ℕ) : ℝ))
+                * (1 + ((R₁ : ℝ) * ‖y₁‖ + (R₂ : ℝ) * ‖y₂‖) * ((T : ℝ) * (‖x₁‖ + ‖x₂‖)))
+            ≤ ((R₁ * R₂ * S' : ℕ) : ℝ))) ∧
+              ∀ a b s : ℕ, a < R₁ → b < R₂ → s < S' →
+                iteratedDeriv s (fun z : ℂ => ∑ i : Fin S, ∑ j : Fin T, ∑ k : Fin T,
+              c i j k * z ^ (i : ℕ) * Complex.exp ((((j : ℕ) : ℂ) * x₁ + ((k : ℕ) : ℂ) * x₂) * z))
+                  ((a : ℂ) * y₁ + (b : ℂ) * y₂) ≠ 0 →
+                ∃ P : Polynomial ℤ, P ≠ 0 ∧
+                  (∀ i : ℕ, |(P.coeff i : ℝ)| ≤ Real.exp (σ₁ N)) ∧
+                  (P.natDegree : ℝ) ≤ σ₂ N ∧
+                  ‖Polynomial.aeval ω P‖ < Real.exp (-(C * σ₁ N * σ₂ N)) := by
+  intro l₁₁ l₁₂ l₂₁ l₂₂ e₁₁ e₁₂ e₂₁ e₂₂ n₁₁ n₁₂ n₂₁ n₂₂ hdet htr hrows hcols
+  obtain ⟨x₁, x₂, y₁, y₂, hx, hy, hexp, htr'⟩ :=
+    rank_one_parametrization l₁₁ l₁₂ l₂₁ l₂₂ e₁₁ e₁₂ e₂₁ e₂₂ n₁₁ n₁₂ n₂₁ n₂₂ hdet htr
+      hrows hcols
+  obtain ⟨ω, hω, k, hk, hcore⟩ := construction_core_1973 x₁ x₂ y₁ y₂ hx hy hexp htr'
+  obtain ⟨hm₁, hm₂, ht₁, ht₂, h21, hg₁, hg₂⟩ := construction_growth k hk
+  refine ⟨ω, hω, _, _, hm₁, hm₂, ht₁, ht₂, 3, 3, by norm_num, by norm_num, h21, hg₁, hg₂,
+    x₁, x₂, y₁, y₂, hx, hy, fun C => ?_⟩
+  obtain ⟨N₁, hN₁⟩ := hcore C
+  obtain ⟨N₂, hN₂⟩ := construction_count_1973 (‖x₁‖ + ‖x₂‖) ‖y₁‖ ‖y₂‖ (by positivity)
+    (norm_nonneg _) (norm_nonneg _)
+  refine ⟨max N₁ N₂, fun N hN => ?_⟩
+  obtain ⟨c, hc, himp⟩ := hN₁ N (lt_of_le_of_lt (le_max_left _ _) hN)
+  exact ⟨_, _, _, _, _, c, hc, ⟨1 / 20, by norm_num, hN₂ N (lt_of_le_of_lt (le_max_right _ _) hN)⟩,
+    himp⟩
+
+end FourExponentials
