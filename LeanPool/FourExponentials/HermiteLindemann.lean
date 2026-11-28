@@ -10,7 +10,8 @@ public import TauCeti.NumberTheory.Transcendental.Lindemann.Corollaries
 /-!
 # Hermite–Lindemann
 
-The library states the Hermite–Lindemann theorem as `FourExponentials.HermiteLindemannProp` and uses it as
+The library states the Hermite–Lindemann theorem as `FourExponentials.HermiteLindemannProp` and uses
+it as
 `FourExponentials.hermite_lindemann_holds`. The proof is Tau Ceti's
 `TauCeti.transcendental_exp_of_isAlgebraic`.
 

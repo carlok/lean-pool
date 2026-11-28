@@ -127,7 +127,8 @@ theorem expPoly_grid_estimate {ι κ : Type*} [Fintype ι] (y : ι → ℂ)
       ((AnalyticOnNhd.analyticOrderAt_eq_top_iff_eq_zero _ fun u => hFd.analyticAt u).1 h)] at h1
     exact_mod_cast h1
   -- the Cauchy estimate on the circle of radius `R = (ρ + 1) u` around the target
-  have key := FourExponentials.cauchy_estimate_with_zeros F hFd w ρ R _ hρ0 (by nlinarith) P hPw hM r
+  have key := FourExponentials.cauchy_estimate_with_zeros F hFd w ρ R _ hρ0
+      (by nlinarith) P hPw hM r
   refine key.trans ?_
   have h1 : R / (R - 1) ≤ 2 := by rw [div_le_iff₀ (by nlinarith)]; nlinarith
   have h2 : (ρ + 1) / (R - ρ) ≤ 1 / (u - 1) := by
